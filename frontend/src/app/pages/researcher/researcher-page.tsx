@@ -1,5 +1,8 @@
 import { WalletSummary } from '../shared/wallet-summary'
 import { useAuthStore } from '../../stores/auth-store'
+import { CohortBuilder } from '../../components/researcher/CohortBuilder'
+import { ResearcherCharts } from '../../components/researcher/ResearcherCharts'
+import { exportCsv } from '../../utils/csvExport'
 
 export const ResearcherPage = () => {
   const { user } = useAuthStore((state) => ({ user: state.user }))
@@ -18,16 +21,19 @@ export const ResearcherPage = () => {
       </header>
       <section className="panel-grid">
         <article className="glass-panel">
-          <h2>Dashboard</h2>
-          <p>Interactive charts powered by BRCA1/BRCA2 and CYP2D6 datasets will land here.</p>
+          <ResearcherCharts data={[{ name: 'BRCA1', value: 12 }, { name: 'BRCA2', value: 7 }, { name: 'CYP2D6', value: 4 }]} />
         </article>
         <article className="glass-panel">
-          <h2>Cohort builder</h2>
-          <p>Filter by trait and ensure a minimum cohort size of five before aggregating data.</p>
+          <CohortBuilder onBuild={(filters) => console.log('build cohort', filters)} />
         </article>
         <article className="glass-panel">
           <h2>Exports</h2>
           <p>Download anonymized CSV reports and share insights with partnering institutions.</p>
+          <div className="mt-3">
+            <button className="btn-primary" onClick={() => exportCsv('cohort.csv', [{ trait: 'BRCA1', count: 12 }, { trait: 'BRCA2', count: 7 }])}>
+              Export CSV
+            </button>
+          </div>
         </article>
       </section>
     </main>
