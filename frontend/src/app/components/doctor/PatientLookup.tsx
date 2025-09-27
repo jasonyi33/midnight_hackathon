@@ -10,7 +10,7 @@ export function PatientLookup({ onRequest }: PatientLookupProps) {
 
   const isValidAddress = (addr: string) => /^0x[a-fA-F0-9]{40}$/.test(addr.trim())
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setTouched(true)
     if (!address) return
@@ -32,7 +32,7 @@ export function PatientLookup({ onRequest }: PatientLookupProps) {
           aria-label="Patient wallet address"
           aria-invalid={showError}
           value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAddress(e.target.value)}
           onBlur={() => setTouched(true)}
           placeholder="0x..."
           className="input"

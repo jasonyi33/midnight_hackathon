@@ -26,7 +26,7 @@ export function CohortBuilder({ onBuild }: CohortBuilderProps) {
       <form onSubmit={handleBuild} className="space-y-3">
         <label className="block">
           <span className="text-sm">Trait</span>
-          <select value={trait} onChange={(e) => setTrait(e.target.value)} className="input mt-1" aria-label="Select trait">
+          <select value={trait} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTrait(e.target.value)} className="input mt-1" aria-label="Select trait">
             <option value="BRCA1">BRCA1</option>
             <option value="BRCA2">BRCA2</option>
             <option value="CYP2D6">CYP2D6</option>
@@ -39,7 +39,7 @@ export function CohortBuilder({ onBuild }: CohortBuilderProps) {
             type="number"
             min={1}
             value={minSize}
-            onChange={(e) => setMinSize(Number(e.target.value))}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMinSize(Number(e.target.value))}
             className="input mt-1"
             aria-describedby="min-size-help"
           />
