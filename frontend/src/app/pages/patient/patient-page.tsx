@@ -13,17 +13,17 @@ export const PatientPage = () => {
     <main className="page-shell">
       <header className="page-header">
         <div>
-          <p className="eyebrow">patient portal</p>
-          <h1>selective genomic proof generation</h1>
+          <p className="eyebrow">Patient Portal</p>
+          <h1>Selective Genomic Proof Generation</h1>
           <p className="subtitle">
-            upload variant summaries, manage consents, and generate zero-knowledge proofs for your healthcare providers.
+            Upload variant summaries, manage consents, and generate zero-knowledge proofs for your healthcare providers.
           </p>
         </div>
         <WalletSummary user={user} />
       </header>
       <section className="panel-grid">
         <article className="glass-panel">
-          <h2>genome uploads</h2>
+          <h2>Genome Uploads</h2>
           {!genomeSummary?.cid ? (
             <GenomeUpload />
           ) : (
@@ -31,13 +31,13 @@ export const PatientPage = () => {
           )}
         </article>
         <article className="glass-panel">
-          <h2>verification requests</h2>
+          <h2>Verification Requests</h2>
           <ConsentManager />
         </article>
         <article className="glass-panel">
-          <h2>proof generation</h2>
+          <h2>Proof Generation</h2>
           {!genomeSummary?.cid ? (
-            <p className="muted-text">please upload your genome data to generate proofs.</p>
+            <p className="muted-text">Please upload your genome data to generate proofs.</p>
           ) : (
             <PatientDashboard genomeSummary={genomeSummary} showProofForm={true} />
           )}

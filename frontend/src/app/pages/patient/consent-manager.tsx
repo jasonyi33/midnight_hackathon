@@ -27,7 +27,7 @@ export const ConsentManager = () => {
   }
   
   if (isLoading) {
-    return <div className="loading-state">loading verification requests...</div>
+    return     <div className="loading-state">Loading verification requests...</div>
   }
   
   if (!requests || requests.length === 0) {
@@ -42,7 +42,7 @@ export const ConsentManager = () => {
     <div className="consent-manager">
       {pendingRequests.length > 0 && (
         <div className="request-section">
-          <h3>pending requests</h3>
+          <h3>Pending Requests</h3>
           <div className="request-list">
             {pendingRequests.map(req => (
               <div key={req.id} className="request-item">
@@ -54,20 +54,20 @@ export const ConsentManager = () => {
                   <span className="trait-pill">{req.traitType}</span>
                 </div>
                 <div className="request-purpose">
-                  <p>verification request for {req.traitType}</p>
+                  <p>Verification request for {req.traitType}</p>
                 </div>
                 <div className="request-actions">
                   <button 
                     className="approve-button"
                     onClick={() => setSelectedRequest(req)}
                   >
-                    approve
+                    Approve
                   </button>
                   <button 
                     className="deny-button"
                     onClick={() => handleDeny(req.id)}
                   >
-                    deny
+                    Deny
                   </button>
                 </div>
               </div>
@@ -78,14 +78,14 @@ export const ConsentManager = () => {
       
       {activeRequests.length > 0 && (
         <div className="request-section">
-          <h3>active consents</h3>
+          <h3>Active Consents</h3>
           <div className="request-list">
             {activeRequests.map(req => (
               <div key={req.id} className="request-item approved">
                 <div className="request-header">
                   <span className="doctor-name">{req.doctorDisplayName || 'dr. unknown'}</span>
                   <span className="expiry-date">
-                    expires: {new Date(req.expiresAt!).toLocaleDateString()}
+                    Expires: {new Date(req.expiresAt!).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="request-traits">
@@ -96,7 +96,7 @@ export const ConsentManager = () => {
                     className="revoke-button"
                     onClick={() => handleDeny(req.id)}
                   >
-                    revoke access
+                    Revoke Access
                   </button>
                 </div>
               </div>
@@ -107,7 +107,7 @@ export const ConsentManager = () => {
       
       {deniedRequests.length > 0 && (
         <div className="request-section">
-          <h3>denied requests</h3>
+          <h3>Denied Requests</h3>
           <div className="request-list">
             {deniedRequests.slice(0, 3).map(req => (
               <div key={req.id} className="request-item denied">
@@ -127,10 +127,10 @@ export const ConsentManager = () => {
       {selectedRequest && (
         <div className="approval-modal">
           <div className="modal-content">
-            <h3>set access duration</h3>
-            <p>approve access for dr. {selectedRequest.doctorDisplayName || 'unknown'}</p>
+            <h3>Set Access Duration</h3>
+            <p>Approve access for Dr. {selectedRequest.doctorDisplayName || 'Unknown'}</p>
             <div className="form-group">
-              <label htmlFor="expiryDays">access duration (days):</label>
+              <label htmlFor="expiryDays">Access duration (days):</label>
               <input
                 id="expiryDays"
                 type="range"
@@ -139,7 +139,7 @@ export const ConsentManager = () => {
                 value={expiryDays}
                 onChange={e => setExpiryDays(parseInt(e.target.value))}
               />
-              <span>{expiryDays} days</span>
+              <span>{expiryDays} Days</span>
             </div>
             <div className="modal-actions">
               <button 
@@ -149,13 +149,13 @@ export const ConsentManager = () => {
                   setSelectedRequest(null)
                 }}
               >
-                confirm
+                Confirm
               </button>
               <button 
                 className="cancel-button"
                 onClick={() => setSelectedRequest(null)}
               >
-                cancel
+                Cancel
               </button>
             </div>
           </div>
