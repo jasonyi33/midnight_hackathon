@@ -23,7 +23,7 @@
       "@/*": ["*"],
       "@config/*": ["config/*"],
       "@utils/*": ["utils/*"],
-      "@types": ["types/index"],
+      "@types/*": ["types/*"],
       "@middleware/*": ["middleware/*"]
     }
   },

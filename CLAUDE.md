@@ -752,3 +752,4 @@ grep -r "TODO\|FIXME" src/
 - Compact Language: https://docs.midnight.network/develop/tutorial
 - SDK Integration: Check with Dev 4 for ProofSDK
 - Exclusively do Dev 3 tasks. Always refer to @genomic-privacy-task-list.md and @merged-genomic-prd.md as context for what to do and the requirements necessary. Also always use @"process-task-list (1).md" as the strategy for how to implement these tasks
+- no longer focus on just dev 3. you are all devs

@@ -1,11 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import { proofQueue } from '@config/redis';
 import { redis } from '@config/redis';
-import { ProofGenerationInput, ProofJob, ZKProof } from './proof.types';
-import { ProofResult } from '@types';
-import { NotFoundError, AppError } from '@utils/errors';
+import { ProofGenerationInput, ProofJob } from './proof.types';
+import { ProofResult } from '@types/index';
+import { NotFoundError } from '@utils/errors';
 import { logger } from '@utils/logger';
-import { query } from '@config/database';
 
 export class ProofService {
   private readonly CACHE_TTL = 3600; // 1 hour
@@ -142,115 +141,6 @@ export class ProofService {
     const jobs = await proofQueue.getJobs(['waiting', 'active']);
     const position = jobs.findIndex(job => job.id === jobId);
     return position === -1 ? 0 : position + 1;
-  }
-
-  /**
-   * Generate proof for genomic trait verification
-   * Called by the proof worker process
-   * Implements FR-015, FR-016, FR-017 requirements
-   */
-  async generateProof(
-    userId: string,
-    traitType: string,
-    genomeCommitmentHash: string,
-    threshold?: number
-  ): Promise<ZKProof> {
-    try {
-      logger.info(`Generating proof for user ${userId}, trait ${traitType}`);
-
-      // Check if proof already exists in cache
-      const cachedProof = await this.getCachedProof(userId, traitType);
-      if (cachedProof) {
-        logger.info(`Using cached proof for ${userId}:${traitType}`);
-        return cachedProof as ZKProof;
-      }
-
-      // Generate unique proof ID and hash
-      const proofId = uuidv4();
-      const proofHash = `0x${this.generateProofHash(userId, traitType, Date.now())}`;
-
-      // Create proof object (will be replaced with actual SDK generation)
-      const proof: ZKProof = {
-        id: proofId,
-        userId,
-        traitType: traitType as any,
-        proofHash,
-        publicInputs: {
-          commitmentHash: genomeCommitmentHash,
-          threshold,
-          timestamp: Date.now()
-        },
-        proof: Buffer.from(JSON.stringify({
-          userId,
-          traitType,
-          threshold,
-          timestamp: Date.now()
-        })).toString('base64'),
-        verificationKey: this.generateVerificationKey(traitType),
-        createdAt: new Date(),
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
-      };
-
-      // Store proof in database
-      await this.storeProofInDatabase(proof);
-
-      // Cache the proof
-      await this.cacheProof(userId, traitType, proof as any);
-
-      logger.info(`Proof generated successfully for ${userId}:${traitType}`);
-      return proof;
-    } catch (error) {
-      logger.error(`Proof generation failed for ${userId}:${traitType}`, error);
-      throw new AppError(500, 'Proof generation failed');
-    }
-  }
-
-  /**
-   * Store proof in database
-   * Implements FR-056, FR-071 (encrypted storage)
-   */
-  private async storeProofInDatabase(proof: ZKProof): Promise<void> {
-    await query(
-      `INSERT INTO proofs (id, user_id, trait_type, proof_hash, proof_data, public_inputs, status, created_at, expires_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       ON CONFLICT (proof_hash) DO NOTHING`,
-      [
-        proof.id,
-        proof.userId,
-        proof.traitType,
-        proof.proofHash,
-        proof.proof,
-        JSON.stringify(proof.publicInputs),
-        'completed',
-        proof.createdAt,
-        proof.expiresAt
-      ]
-    );
-  }
-
-  /**
-   * Generate deterministic proof hash
-   */
-  private generateProofHash(userId: string, traitType: string, timestamp: number): string {
-    const crypto = require('crypto');
-    const data = `${userId}:${traitType}:${timestamp}`;
-    return crypto.createHash('sha256').update(data).digest('hex');
-  }
-
-  /**
-   * Generate mock verification key
-   * Will be replaced with actual key from ProofSDK
-   */
-  private generateVerificationKey(traitType: string): string {
-    return Buffer.from(JSON.stringify({
-      type: 'groth16',
-      curve: 'bn128',
-      circuit: traitType.toLowerCase(),
-      alpha_g1: 'mock_alpha',
-      beta_g2: 'mock_beta',
-      gamma_g2: 'mock_gamma',
-      delta_g2: 'mock_delta'
-    })).toString('base64');
   }
 }
 

@@ -2,8 +2,9 @@ import jwt from 'jsonwebtoken';
 import { createHash } from 'crypto';
 import { config } from '@config/index';
 import { query, queryActive } from '@config/database';
-import { AuthTokens, User } from '@types';
+import { AuthTokens, User } from '@types/index';
 import { AuthenticationError } from '@utils/errors';
+import { v4 as uuidv4 } from 'uuid';
 
 export class AuthService {
   generateTokens(user: User): AuthTokens {
@@ -97,9 +98,6 @@ export class AuthService {
       throw new AuthenticationError('User not found');
     }
 
-    // Use refresh token manager for secure rotation
-    // Note: This requires importing refreshTokenManager from security middleware
-    // For now, keeping the existing implementation until security middleware is fully integrated
     return this.generateTokens(user);
   }
 

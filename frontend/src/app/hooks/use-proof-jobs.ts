@@ -100,3 +100,7 @@ export const useTraitProofAvailability = () => {
     [data],
   )
 }
+
+// Aliases for consistent naming
+export const useProofJobs = useProofHistory
+export const useProofRecords = useProofHistory
