@@ -1,0 +1,379 @@
+# Genomic Privacy DApp - Cursor Rules
+
+## Project Overview
+This is a genomic privacy DApp built on Midnight blockchain for the MLH Midnight Hackathon. The project enables patients to prove specific genetic traits without revealing their complete genomic sequence using zero-knowledge proofs and selective disclosure.
+
+## Architecture
+- **Frontend**: React + TypeScript + Vite (Patient, Doctor, Researcher portals)
+- **Backend**: Node.js + Express + TypeScript (API, WebSocket, Queue)
+- **Blockchain**: Midnight + Compact language (Smart contracts, ZK circuits)
+- **Storage**: PostgreSQL + Redis + IPFS (Encrypted genomic data)
+
+## Development Team Structure
+- **[Dev 1]** Frontend Core (Patient Portal) - Wallet integration, upload UI, consent management
+- **[Dev 2]** Frontend Secondary (Doctor/Researcher Portals) - Premium UI/UX, animations, data visualization
+- **[Dev 3]** Backend & Infrastructure - API, database, proof queue, IPFS integration
+- **[Dev 4]** Blockchain & ZK Circuits - Smart contracts, proof generation SDK
+
+## Code Style & Standards
+
+### TypeScript Configuration
+- Use strict TypeScript with no implicit any
+- Prefer interfaces over types for object shapes
+- Use const assertions for immutable data
+- Implement proper error handling with custom error classes
+
+### React Best Practices
+- Use functional components with hooks
+- Implement proper loading states and error boundaries
+- Use React.memo for expensive components
+- Prefer composition over inheritance
+- Use custom hooks for reusable logic
+
+### State Management
+- Use Zustand for global state (auth, wallet, proofs)
+- Use React Query for server state management
+- Implement optimistic updates for better UX
+- Persist critical state to localStorage with encryption
+
+### Styling Guidelines
+- Use TailwindCSS with custom design system
+- Implement glass morphism effects (backdrop-filter: blur(10px))
+- Use CSS custom properties for theming
+- Ensure 60fps animations with requestAnimationFrame
+- Responsive design: 768px (tablet), 1024px (desktop), 1920px (wide)
+
+## Security Requirements
+
+### Data Privacy
+- NEVER store unencrypted genomic data
+- Use AES-256-GCM encryption for all sensitive data
+- Implement proper key management and rotation
+- Use IPFS for encrypted data storage with deterministic CIDs
+- All genomic data must be encrypted before transmission
+
+### Authentication
+- Use Lace wallet for Midnight testnet authentication
+- Implement JWT tokens with 1-hour expiry and refresh tokens
+- Hash wallet addresses to create deterministic patient IDs
+- Handle wallet disconnection gracefully
+
+### API Security
+- Rate limiting: 100 requests/minute per IP
+- Input validation using JSON schemas
+- CORS configuration for frontend origin only
+- Security headers with Helmet.js
+- Correlation IDs for request tracking
+
+## Blockchain Integration
+
+### Midnight Blockchain
+- Use Compact language for smart contracts
+- Implement proper access control with modifiers
+- Emit events for all state changes
+- Use Pedersen commitments for privacy
+- Implement circuit breaker for emergency pause
+
+### Zero-Knowledge Proofs
+- Generate real ZK proofs using Halo2 framework
+- Support boolean proofs (mutation present/absent)
+- Support range proofs (risk score < threshold)
+- Support set membership proofs (variant in approved list)
+- Cache proofs in Redis with 1-hour TTL
+
+### Smart Contract Patterns
+- Use commit-reveal pattern for sensitive data
+- Implement Merkle trees for private set membership
+- Use nullifiers to prevent double-spending
+- Implement proper event emission for audit trails
+
+## Database Design
+
+### Core Tables
+- `users`: Wallet addresses, roles, timestamps
+- `genome_commitments`: IPFS CIDs, encryption keys, hashes
+- `verification_requests`: Patient-doctor requests, status, proofs
+- `audit_log`: All operations with correlation IDs
+
+### Data Encryption
+- Encrypt sensitive fields using AES-256-GCM
+- Store encryption keys in environment variables
+- Implement soft deletes for audit compliance
+- Automated backups every 6 hours
+
+## API Design
+
+### RESTful Endpoints
+- `POST /api/auth/connect` - Wallet authentication
+- `POST /api/proof/generate` - Queue proof generation
+- `GET /api/proof/status/:jobId` - Check proof progress
+- `POST /api/verification/request` - Doctor requests verification
+- `GET /api/verification/list` - List patient requests
+- `POST /api/verification/respond` - Patient approves/denies
+
+### WebSocket Events
+- `proof:progress` - Proof generation updates
+- `proof:complete` - Proof generation finished
+- `verification:requested` - New verification request
+- `verification:approved` - Request approved by patient
+
+## UI/UX Guidelines
+
+### Design System
+- Dark theme with purple/cyan gradients
+- Glass morphism effects with backdrop-filter
+- Space Grotesk for headers, Inter for body text
+- Consistent spacing scale with 4px base unit
+- Smooth transitions (300ms ease-out)
+
+### Animation Patterns
+- Page transitions: 300ms ease-out
+- Micro-interactions: 150ms ease
+- Loading states: Infinite pulse at 2s intervals
+- Success states: Confetti or particle burst
+- Proof generation: Progressive wave animation
+
+### Component Library
+- GlassCard: Glass morphism container
+- GlassButton: Interactive button with hover effects
+- SkeletonLoader: Pulsing placeholder for async content
+- ProgressBar: Real-time proof generation progress
+- NotificationToast: Real-time updates
+
+## Error Handling
+
+### Critical Path Protection
+The demo flow MUST work flawlessly:
+1. Connect wallet
+2. Upload genome
+3. Generate proof
+4. Doctor request
+5. Patient approval
+6. View result
+
+### Error Recovery
+- Wallet connection issues → Show installation guide
+- IPFS failures → Use local storage fallback
+- Proof generation timeout → Retry with user confirmation
+- Network issues → Offline mode with cached data
+
+### User-Friendly Messages
+- "Lace Wallet Required" with download link
+- "Insufficient tDUST" with faucet link
+- "Proof generation taking longer than usual..."
+- "All IPFS gateways failed, using local storage"
+
+## Performance Requirements
+
+### Frontend Performance
+- 60fps animations on mid-range hardware
+- Bundle size optimization with code splitting
+- Lazy loading for portal routes
+- React.memo for expensive components
+
+### Backend Performance
+- API response time <200ms cached, <2s computed
+- Support 10+ concurrent users
+- Proof generation <10s simple, <30s complex
+- Database connection pooling (max 20 connections)
+
+## Testing Strategy
+
+### Unit Testing
+- Test all utility functions
+- Test API endpoints with mock data
+- Test smart contract functions
+- Test proof generation circuits
+
+### Integration Testing
+- Test wallet connection flow
+- Test proof generation end-to-end
+- Test verification request flow
+- Test real-time updates
+
+### Demo Testing
+- Practice complete flow 5 times
+- Test on 3G network throttling
+- Record backup video
+- Prepare answers for likely questions
+
+## Deployment Configuration
+
+### Environment Variables
+```bash
+# Frontend
+VITE_API_URL=http://localhost:3000
+VITE_WS_URL=ws://localhost:3000
+VITE_MIDNIGHT_NETWORK=testnet
+VITE_IPFS_GATEWAY=https://ipfs.infura.io
+
+# Backend
+DATABASE_URL=postgresql://user:pass@localhost:5432/genomic_privacy
+REDIS_URL=redis://localhost:6379
+MIDNIGHT_RPC_URL=https://testnet.midnight.network/rpc
+JWT_SECRET=generate-256-bit-secret-here
+
+# Contracts
+MIDNIGHT_NETWORK=testnet
+DEPLOYER_PRIVATE_KEY=your-testnet-private-key
+```
+
+### Production Deployment
+- Frontend: Vercel with custom domain
+- Backend: Railway/Render with PostgreSQL and Redis
+- Contracts: Midnight testnet with verified contracts
+- IPFS: Pinata with API keys
+
+## Medical Data Handling
+
+### Genomic Data Format
+```typescript
+interface GenomicData {
+  patientId: string;
+  sequenceDate: string;
+  genome: {
+    BRCA1: GeneticMarker;
+    BRCA2: GeneticMarker;
+    CYP2D6: PharmacogenomicMarker;
+  };
+  metadata: {
+    version: string;
+    laboratory?: string;
+    qualityScore?: number;
+  };
+}
+```
+
+### Validation Rules
+- BRCA1/BRCA2 risk scores: 0.0 to 1.0
+- CYP2D6 activity scores: 0.0 to 3.0
+- Confidence scores: 0.0 to 1.0
+- Minimum cohort size: 5 patients for aggregation
+
+## Development Workflow
+
+### Git Branch Strategy
+```
+main → develop → feature/[frontend-patient|frontend-portals|backend|blockchain]
+```
+
+### Code Review Process
+- All PRs require review from at least one other developer
+- Critical path changes require review from lead
+- Security-related changes require review from Dev 3
+- Blockchain changes require review from Dev 4
+
+### Commit Message Format
+```
+type(scope): description
+
+- feat: new feature
+- fix: bug fix
+- docs: documentation
+- style: formatting
+- refactor: code refactoring
+- test: adding tests
+- chore: maintenance
+```
+
+## Emergency Procedures
+
+### If Midnight testnet is down
+- Use demo mode with mock proofs
+- Pre-generate common proofs for instant demo
+- Use local testnet backup
+
+### If IPFS fails
+- Use PostgreSQL for encrypted storage with mock CIDs
+- Implement local storage fallback
+- Use multiple IPFS gateways
+
+### If deployment fails
+- Use ngrok for local tunneling
+- Deploy to alternative hosting providers
+- Use pre-recorded video as backup
+
+## Success Metrics
+
+### Technical Metrics
+- Proof generation time <10s simple, <30s complex
+- Concurrent users: 10+ simultaneous
+- API response time <200ms cached, <2s computed
+- UI frame rate: 60fps animations
+- Zero knowledge: No genomic data in logs
+
+### Demo Metrics
+- All core features functional
+- Three complete user personas
+- End-to-end demo ready
+- Premium UI with smooth animations
+- Real-time updates working
+
+## Documentation Requirements
+
+### README.md
+- Project overview and problem statement
+- Setup instructions with prerequisites
+- List of features with checkmarks
+- Team members and contributions
+- Demo credentials and URLs
+
+### Technical Documentation
+- Architecture diagram showing all components
+- Smart contract addresses and ABI
+- API endpoint documentation
+- Known issues and workarounds
+
+## Code Quality Standards
+
+### TypeScript
+- Use strict mode with no implicit any
+- Implement proper error handling
+- Use meaningful variable names
+- Add JSDoc comments for complex functions
+
+### React
+- Use functional components with hooks
+- Implement proper loading states
+- Use React.memo for performance
+- Follow React best practices
+
+### Backend
+- Use proper error handling with custom classes
+- Implement rate limiting and security headers
+- Use connection pooling for databases
+- Add comprehensive logging
+
+### Smart Contracts
+- Use proper access control modifiers
+- Emit events for all state changes
+- Implement circuit breakers
+- Add comprehensive comments
+
+## Final Checklist
+
+### Before Hour 24
+- [ ] Core smart contracts deployed
+- [ ] Proof generation working end-to-end
+- [ ] All three portals accessible
+- [ ] IPFS integration functional
+- [ ] Basic error handling in place
+
+### Before Hour 40
+- [ ] All features code complete
+- [ ] Demo flow tested 5+ times
+- [ ] Video backup recorded
+- [ ] Documentation complete
+- [ ] Production deployment successful
+
+### Before Submission
+- [ ] README with setup instructions
+- [ ] Architecture diagram included
+- [ ] Demo credentials provided
+- [ ] Video demo linked
+- [ ] All code committed and pushed
+- [ ] Submission form completed
+
+---
+
+**Remember**: This is a 48-hour hackathon project. Focus on delivering a working MVP that demonstrates the core value proposition of privacy-preserving genomic verification. Prioritize the critical path and ensure the demo flows work flawlessly.
