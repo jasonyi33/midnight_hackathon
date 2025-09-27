@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: genomic-postgres
+    environment:
+      POSTGRES_USER: genomic
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: genomic_privacy
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U genomic"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: genomic-redis
+    environment:
+      REDIS_PASSWORD: genomic_redis_pass_2024
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass genomic_redis_pass_2024
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "genomic_redis_pass_2024", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:

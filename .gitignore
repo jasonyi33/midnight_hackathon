@@ -1,0 +1,84 @@
+# Dependencies
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+**/.env
+**/.env.*
+
+# Build output
+dist/
+build/
+**/dist/
+**/build/
+*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output
+**/coverage/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+tmp/
+
+# Database
+*.sqlite
+*.db
+
+# Docker volumes
+postgres_data/
+redis_data/
+
+# Documentation files (markdown)
+*.md
+**/*.md
+
+# Backup files
+*.backup
+*.bak
+
+# Typescript
+*.tsbuildinfo
+
+# Package manager lock files (keep these in version control normally, but ignoring for hackathon)
+# Uncomment these lines if you want to track lock files:
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml

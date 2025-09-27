@@ -1,0 +1,7 @@
+{
+  "migrations-dir": "migrations",
+  "migrations-table": "pgmigrations",
+  "template-file-name": "{timestamp}_{name}.sql",
+  "schema": "public",
+  "check-order": true
+}
