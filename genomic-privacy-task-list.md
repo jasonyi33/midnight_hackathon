@@ -1,170 +1,337 @@
-# Implementation Task List: Genomic Privacy DApp on Midnight Blockchain
+# Implementation Task List: Genomic Privacy DApp on Midnight Blockchain# Implementation Task List: Genomic Privacy DApp on Midnight Blockchain
 
-## Developer Assignment Key
-- **[Dev 1]** = Frontend Core (Patient Portal)
-- **[Dev 2]** = Frontend Secondary (Doctor/Researcher Portals & UI)
-- **[Dev 3]** = Backend & Infrastructure
-- **[Dev 4]** = Blockchain & ZK Circuits
 
-## Git Branch Structure
-```
-main → develop → feature/[frontend-patient|frontend-portals|backend|blockchain]
-```
 
-## Phase 0: Pre-Hackathon Setup (T-24 to T-0 hours)
+## Developer Assignment Key## Developer Assignment Key
 
-### Environment Setup [All]
-- [ ] **0.1** Install Node.js 20 LTS, Docker Desktop, Git, VS Code with TypeScript/ESLint/Prettier extensions
-- [ ] **0.2** Create GitHub repo "genomic-privacy-dapp" with branch protection on main
-- [ ] **0.3** Initialize monorepo structure: frontend/, backend/, contracts/, shared/ folders
-- [ ] **0.4** Create feature branches: feature/frontend-patient, feature/frontend-portals, feature/backend, feature/blockchain
+- **[Dev 1]** = Frontend Core (Patient Portal)- **[Dev 1]** = Frontend Core (Patient Portal)
 
-### Blockchain Setup [All]
-- [ ] **0.5** Install Lace wallet browser extension and connect to Midnight testnet
-- [ ] **0.6** Get testnet tDUST from faucet (100 tokens per developer)
-- [ ] **0.7** [Dev 4] Install Midnight Compact compiler: `npm install -g @midnight-ntwrk/compact-compiler@0.24.0`
+- **[Dev 2]** = Frontend Secondary (Doctor/Researcher Portals & UI)- **[Dev 2]** = Frontend Secondary (Doctor/Researcher Portals & UI)
 
-### Service Accounts [Dev 3]
-- [ ] **0.8** Create Pinata account for IPFS, generate API keys (use free tier - 1GB storage)
-- [ ] **0.9** Create Vercel team account for frontend deployment
-- [ ] **0.10** Set up Railway account for backend hosting with PostgreSQL and Redis addons
-- [ ] **0.11** Create shared .env file with all API keys and share via secure channel
+- **[Dev 3]** = Backend & Infrastructure- **[Dev 3]** = Backend & Infrastructure
 
-### Project Initialization [Split by role]
-- [ ] **0.12** [Dev 1] Initialize React with Vite: `npm create vite@latest frontend -- --template react-ts`
-- [ ] **0.13** [Dev 2] Install UI dependencies: tailwindcss, framer-motion, three, recharts, react-hot-toast
-- [ ] **0.14** [Dev 3] Initialize Express backend with TypeScript, install: express, pg, redis, bull, socket.io, jsonwebtoken
-- [ ] **0.15** [Dev 4] Initialize contracts with create-midnight-app, install Midnight SDK
+- **[Dev 4]** = Blockchain & ZK Circuits- **[Dev 4]** = Blockchain & ZK Circuits
 
-## Phase 1: Foundation (Hours 0-8)
 
-### 1.0 Core Infrastructure
 
-- [ ] **1.1** [Dev 1] **Set up React routing**
-  - Create routes for /patient, /doctor, /researcher using react-router-dom
-  - Implement ProtectedRoute component checking authentication and role
-  - Set up QueryClient with 5min stale time, 3 retries with exponential backoff
+## Git Branch Structure## Git Branch Structure
 
-- [ ] **1.2** [Dev 2] **Create glass morphism design system**
-  - Configure Tailwind with custom colors: primary-dark (#1a1a2e), primary-purple (#6c63ff), accent-cyan (#00d9ff)
-  - Create .glass-card utility with backdrop-filter: blur(10px) and rgba(255,255,255,0.1) background
-  - Add custom animations: float (6s), gradient (15s), pulse-slow (3s)
+``````
 
-- [ ] **1.3** [Dev 3] **Set up Express server**
-  - Configure middleware stack: helmet (CSP headers), cors (frontend origin), compression, rate-limit (100/min)
-  - Create health check endpoint returning uptime and environment
-  - Set up error handling middleware with custom error classes
+main → develop → feature/[frontend-patient|frontend-portals|backend|blockchain]main → develop → feature/[frontend-patient|frontend-portals|backend|blockchain]
 
-- [ ] **1.4** [Dev 4] **Create GenomicVerifier contract skeleton**
-  - Define ledger state: verificationCount, authorizedVerifiers map, commitments map, verificationEvents list
-  - Define private state: patientGenomes map, accessGrants map, proofCache map
-  - Implement storeCommitment function accepting patient address, commitment hash, IPFS CID
+``````
 
-### 1.1 Authentication System (FR-001 to FR-006)
 
-- [ ] **1.5** [Dev 1] **Implement Lace wallet connection**
-  - Check for window.cardano.lace existence, throw error if not installed
-  - Call lace.enable() to request access, get addresses with getUsedAddresses()
-  - Sign authentication message with timestamp using signData()
-  - Display tDUST balance from getBalance() in UI
 
-- [ ] **1.6** [Dev 3] **Create authentication endpoints**
-  - POST /api/auth/connect - verify signature, generate JWT (1hr) and refresh token (24hr)
-  - Hash wallet address to create deterministic patient ID
-  - Store user in database with role defaulting to 'patient'
-  - Return tokens and user object
+## Phase 0: Pre-Hackathon Setup (T-24 to T-0 hours)## Phase 0: Pre-Hackathon Setup (T-24 to T-0 hours)
 
-- [ ] **1.7** [Dev 1] **Create Zustand auth store**
-  - Store: isAuthenticated, user, accessToken, refreshToken, balance
-  - Actions: connectWallet, disconnect, refreshAuth, setBalance
-  - Persist tokens to localStorage with encryption
-  - Handle wallet switching without losing state
 
-### 1.2 Database Setup (FR-068 to FR-073)
 
-- [ ] **1.8** [Dev 3] **Configure PostgreSQL and Redis**
-  - Create docker-compose.yml with postgres:15 and redis:7.2 images
-  - Set up connection pools: PostgreSQL (max 20), Redis (with password)
-  - Implement health checks for both services
+### Environment Setup [All]### Environment Setup [All]
 
-- [ ] **1.9** [Dev 3] **Create database schema**
-  - Tables: users, genome_commitments, verification_requests, audit_log
-  - Add indexes on foreign keys and frequently queried columns
-  - Implement soft deletes with deleted_at column
-  - Create migration scripts with node-pg-migrate
+- [ ] **0.1** Install Node.js 20 LTS, Docker Desktop, Git, VS Code with TypeScript/ESLint/Prettier extensions- [ ] **0.1** Install Node.js 20 LTS, Docker Desktop, Git, VS Code with TypeScript/ESLint/Prettier extensions
 
-- [ ] **1.10** [Dev 3] **Set up data encryption**
-  - Encrypt sensitive fields using AES-256-GCM before storage
-  - Store encryption keys in environment variables
-  - Create automated backup script running every 6 hours
+- [ ] **0.2** Create GitHub repo "genomic-privacy-dapp" with branch protection on main- [ ] **0.2** Create GitHub repo "genomic-privacy-dapp" with branch protection on main
 
-### 1.3 Smart Contract Foundation (FR-052 to FR-059)
+- [ ] **0.3** Initialize monorepo structure: frontend/, backend/, contracts/, shared/ folders- [ ] **0.3** Initialize monorepo structure: frontend/, backend/, contracts/, shared/ folders
 
-- [ ] **1.11** [Dev 4] **Deploy GenomicVerifier to testnet**
-  - Compile contract with compactc, generate ABI
-  - Deploy using deployment script with owner address
-  - Verify contract on Midnight explorer
+- [ ] **0.4** Create feature branches: feature/frontend-patient, feature/frontend-portals, feature/backend, feature/blockchain- [ ] **0.4** Create feature branches: feature/frontend-patient, feature/frontend-portals, feature/backend, feature/blockchain
 
-- [ ] **1.12** [Dev 4] **Implement access control**
-  - Create onlyAuthorized modifier checking authorizedVerifiers mapping
-  - Add addVerifier/removeVerifier functions restricted to owner
-  - Implement emergency pause circuit breaker
 
-- [ ] **1.13** [Dev 4] **Create BRCA1 proof circuit**
-  - Define circuit accepting genome data and threshold
-  - Implement boolean logic for mutation present/absent
-  - Generate proof with Halo2 backend
-  - Return proof hash and public inputs
 
-### 1.4 UI Foundation (FR-044 to FR-051)
+### Blockchain Setup [All]### Blockchain Setup [All]
 
-- [ ] **1.14** [Dev 2] **Implement dark theme**
-  - Set body background to #1a1a2e, text to white
-  - Configure fonts: Inter (body), Space Grotesk (headers), JetBrains Mono (code)
-  - Create consistent spacing scale: 4px base unit
+- [ ] **0.5** Install Lace wallet browser extension and connect to Midnight testnet- [ ] **0.5** Install Lace wallet browser extension and connect to Midnight testnet
 
-- [ ] **1.15** [Dev 2] **Create animated background**
-  - Implement Three.js particle system or use particles.js
-  - Add floating geometric shapes with subtle rotation
-  - Ensure 60fps performance with requestAnimationFrame
+- [ ] **0.6** Get testnet tDUST from faucet (100 tokens per developer)- [ ] **0.6** Get testnet tDUST from faucet (100 tokens per developer)
 
-- [ ] **1.16** [Dev 2] **Build component library**
-  - GlassCard: glass morphism container with customizable padding
-  - GlassButton: interactive button with hover state lifting effect
-  - SkeletonLoader: pulsing placeholder for async content
-  - Add Framer Motion page transitions (300ms ease-out)
+- [ ] **0.7** [Dev 4] Install Midnight Compact compiler: `npm install -g @midnight-ntwrk/compact-compiler@0.24.0`- [ ] **0.7** [Dev 4] Install Midnight Compact compiler: `npm install -g @midnight-ntwrk/compact-compiler@0.24.0`
 
-**HOUR 8 GIT MERGE:** All developers merge to develop branch
 
-## Phase 2: Core Features (Hours 8-16)
 
-### 2.0 Genomic Data Management (FR-007 to FR-014)
+### Service Accounts [Dev 3]### Service Accounts [Dev 3]
 
-- [ ] **2.1** [Dev 1] **Create genome upload component**
-  - Accept JSON file upload with drag-and-drop
-  - Validate structure: check for required fields (BRCA1, BRCA2, CYP2D6)
-  - Display file preview with syntax highlighting
-  - Show upload progress with percentage
+- [ ] **0.8** Create Pinata account for IPFS, generate API keys (use free tier - 1GB storage)- [ ] **0.8** Create Pinata account for IPFS, generate API keys (use free tier - 1GB storage)
 
-- [ ] **2.2** [Dev 3] **Implement encryption service**
-  - Use crypto-js for AES-256-GCM encryption
-  - Generate random salt and IV for each encryption
-  - Return encrypted data with salt, IV, and auth tag
-  - Never store unencrypted genomic data
+- [ ] **0.9** Create Vercel team account for frontend deployment- [ ] **0.9** Create Vercel team account for frontend deployment
 
-- [ ] **2.3** [Dev 3] **Create IPFS service**
-  - Initialize Pinata client with API keys
-  - Pin encrypted JSON with metadata (patient ID, timestamp)
-  - Verify pinning success with getPinByHash
-  - Store IPFS CID in database with commitment hash
+- [ ] **0.10** Set up Railway account for backend hosting with PostgreSQL and Redis addons- [ ] **0.10** Set up Railway account for backend hosting with PostgreSQL and Redis addons
 
-### 2.1 Proof Generation System (FR-015 to FR-023)
+- [ ] **0.11** Create shared .env file with all API keys and share via secure channel- [ ] **0.11** Create shared .env file with all API keys and share via secure channel
 
-- [ ] **2.4** [Dev 4] **Complete ZK circuits**
-  - BRCA1: boolean proof for mutation detection
-  - BRCA2: boolean proof with same logic
+
+
+### Project Initialization [Split by role]### Project Initialization [Split by role]
+
+- [ ] **0.12** [Dev 1] Initialize React with Vite: `npm create vite@latest frontend -- --template react-ts`- [ ] **0.12** [Dev 1] Initialize React with Vite: `npm create vite@latest frontend -- --template react-ts`
+
+- [ ] **0.13** [Dev 2] Install UI dependencies: tailwindcss, framer-motion, three, recharts, react-hot-toast- [ ] **0.13** [Dev 2] Install UI dependencies: tailwindcss, framer-motion, three, recharts, react-hot-toast
+
+- [ ] **0.14** [Dev 3] Initialize Express backend with TypeScript, install: express, pg, redis, bull, socket.io, jsonwebtoken- [ ] **0.14** [Dev 3] Initialize Express backend with TypeScript, install: express, pg, redis, bull, socket.io, jsonwebtoken
+
+- [ ] **0.15** [Dev 4] Initialize contracts with create-midnight-app, install Midnight SDK- [ ] **0.15** [Dev 4] Initialize contracts with create-midnight-app, install Midnight SDK
+
+
+
+## Phase 1: Foundation (Hours 0-8)## Phase 1: Foundation (Hours 0-8)
+
+
+
+### 1.0 Core Infrastructure### 1.0 Core Infrastructure
+
+
+
+- [ ] **1.1** [Dev 1] **Set up React routing**- [ ] **1.1** [Dev 1] **Set up React routing**
+
+  - Create routes for /patient, /doctor, /researcher using react-router-dom  - Create routes for /patient, /doctor, /researcher using react-router-dom
+
+  - Implement ProtectedRoute component checking authentication and role  - Implement ProtectedRoute component checking authentication and role
+
+  - Set up QueryClient with 5min stale time, 3 retries with exponential backoff  - Set up QueryClient with 5min stale time, 3 retries with exponential backoff
+
+
+
+- [ ] **1.2** [Dev 2] **Create glass morphism design system**- [ ] **1.2** [Dev 2] **Create glass morphism design system**
+
+  - Configure Tailwind with custom colors: primary-dark (#1a1a2e), primary-purple (#6c63ff), accent-cyan (#00d9ff)  - Configure Tailwind with custom colors: primary-dark (#1a1a2e), primary-purple (#6c63ff), accent-cyan (#00d9ff)
+
+  - Create .glass-card utility with backdrop-filter: blur(10px) and rgba(255,255,255,0.1) background  - Create .glass-card utility with backdrop-filter: blur(10px) and rgba(255,255,255,0.1) background
+
+  - Add custom animations: float (6s), gradient (15s), pulse-slow (3s)  - Add custom animations: float (6s), gradient (15s), pulse-slow (3s)
+
+
+
+- [ ] **1.3** [Dev 3] **Set up Express server**- [ ] **1.3** [Dev 3] **Set up Express server**
+
+  - Configure middleware stack: helmet (CSP headers), cors (frontend origin), compression, rate-limit (100/min)  - Configure middleware stack: helmet (CSP headers), cors (frontend origin), compression, rate-limit (100/min)
+
+  - Create health check endpoint returning uptime and environment  - Create health check endpoint returning uptime and environment
+
+  - Set up error handling middleware with custom error classes  - Set up error handling middleware with custom error classes
+
+
+
+- [ ] **1.4** [Dev 4] **Create GenomicVerifier contract skeleton**- [ ] **1.4** [Dev 4] **Create GenomicVerifier contract skeleton**
+
+  - Define ledger state: verificationCount, authorizedVerifiers map, commitments map, verificationEvents list  - Define ledger state: verificationCount, authorizedVerifiers map, commitments map, verificationEvents list
+
+  - Define private state: patientGenomes map, accessGrants map, proofCache map  - Define private state: patientGenomes map, accessGrants map, proofCache map
+
+  - Implement storeCommitment function accepting patient address, commitment hash, IPFS CID  - Implement storeCommitment function accepting patient address, commitment hash, IPFS CID
+
+
+
+### 1.1 Authentication System (FR-001 to FR-006)### 1.1 Authentication System (FR-001 to FR-006)
+
+
+
+- [ ] **1.5** [Dev 1] **Implement Lace wallet connection**- [ ] **1.5** [Dev 1] **Implement Lace wallet connection**
+
+  - Check for window.cardano.lace existence, throw error if not installed  - Check for window.cardano.lace existence, throw error if not installed
+
+  - Call lace.enable() to request access, get addresses with getUsedAddresses()  - Call lace.enable() to request access, get addresses with getUsedAddresses()
+
+  - Sign authentication message with timestamp using signData()  - Sign authentication message with timestamp using signData()
+
+  - Display tDUST balance from getBalance() in UI  - Display tDUST balance from getBalance() in UI
+
+
+
+- [ ] **1.6** [Dev 3] **Create authentication endpoints**- [ ] **1.6** [Dev 3] **Create authentication endpoints**
+
+  - POST /api/auth/connect - verify signature, generate JWT (1hr) and refresh token (24hr)  - POST /api/auth/connect - verify signature, generate JWT (1hr) and refresh token (24hr)
+
+  - Hash wallet address to create deterministic patient ID  - Hash wallet address to create deterministic patient ID
+
+  - Store user in database with role defaulting to 'patient'  - Store user in database with role defaulting to 'patient'
+
+  - Return tokens and user object  - Return tokens and user object
+
+
+
+- [ ] **1.7** [Dev 1] **Create Zustand auth store**- [ ] **1.7** [Dev 1] **Create Zustand auth store**
+
+  - Store: isAuthenticated, user, accessToken, refreshToken, balance  - Store: isAuthenticated, user, accessToken, refreshToken, balance
+
+  - Actions: connectWallet, disconnect, refreshAuth, setBalance  - Actions: connectWallet, disconnect, refreshAuth, setBalance
+
+  - Persist tokens to localStorage with encryption  - Persist tokens to localStorage with encryption
+
+  - Handle wallet switching without losing state  - Handle wallet switching without losing state
+
+
+
+### 1.2 Database Setup (FR-068 to FR-073)### 1.2 Database Setup (FR-068 to FR-073)
+
+
+
+- [ ] **1.8** [Dev 3] **Configure PostgreSQL and Redis**- [ ] **1.8** [Dev 3] **Configure PostgreSQL and Redis**
+
+  - Create docker-compose.yml with postgres:15 and redis:7.2 images  - Create docker-compose.yml with postgres:15 and redis:7.2 images
+
+  - Set up connection pools: PostgreSQL (max 20), Redis (with password)  - Set up connection pools: PostgreSQL (max 20), Redis (with password)
+
+  - Implement health checks for both services  - Implement health checks for both services
+
+
+
+- [ ] **1.9** [Dev 3] **Create database schema**- [ ] **1.9** [Dev 3] **Create database schema**
+
+  - Tables: users, genome_commitments, verification_requests, audit_log  - Tables: users, genome_commitments, verification_requests, audit_log
+
+  - Add indexes on foreign keys and frequently queried columns  - Add indexes on foreign keys and frequently queried columns
+
+  - Implement soft deletes with deleted_at column  - Implement soft deletes with deleted_at column
+
+  - Create migration scripts with node-pg-migrate  - Create migration scripts with node-pg-migrate
+
+
+
+- [ ] **1.10** [Dev 3] **Set up data encryption**- [ ] **1.10** [Dev 3] **Set up data encryption**
+
+  - Encrypt sensitive fields using AES-256-GCM before storage  - Encrypt sensitive fields using AES-256-GCM before storage
+
+  - Store encryption keys in environment variables  - Store encryption keys in environment variables
+
+  - Create automated backup script running every 6 hours  - Create automated backup script running every 6 hours
+
+
+
+### 1.3 Smart Contract Foundation (FR-052 to FR-059)### 1.3 Smart Contract Foundation (FR-052 to FR-059)
+
+
+
+- [ ] **1.11** [Dev 4] **Deploy GenomicVerifier to testnet**- [ ] **1.11** [Dev 4] **Deploy GenomicVerifier to testnet**
+
+  - Compile contract with compactc, generate ABI  - Compile contract with compactc, generate ABI
+
+  - Deploy using deployment script with owner address  - Deploy using deployment script with owner address
+
+  - Verify contract on Midnight explorer  - Verify contract on Midnight explorer
+
+
+
+- [ ] **1.12** [Dev 4] **Implement access control**- [ ] **1.12** [Dev 4] **Implement access control**
+
+  - Create onlyAuthorized modifier checking authorizedVerifiers mapping  - Create onlyAuthorized modifier checking authorizedVerifiers mapping
+
+  - Add addVerifier/removeVerifier functions restricted to owner  - Add addVerifier/removeVerifier functions restricted to owner
+
+  - Implement emergency pause circuit breaker  - Implement emergency pause circuit breaker
+
+
+
+- [ ] **1.13** [Dev 4] **Create BRCA1 proof circuit**- [ ] **1.13** [Dev 4] **Create BRCA1 proof circuit**
+
+  - Define circuit accepting genome data and threshold  - Define circuit accepting genome data and threshold
+
+  - Implement boolean logic for mutation present/absent  - Implement boolean logic for mutation present/absent
+
+  - Generate proof with Halo2 backend  - Generate proof with Halo2 backend
+
+  - Return proof hash and public inputs  - Return proof hash and public inputs
+
+
+
+### 1.4 UI Foundation (FR-044 to FR-051)### 1.4 UI Foundation (FR-044 to FR-051)
+
+
+
+- [ ] **1.14** [Dev 2] **Implement dark theme**- [ ] **1.14** [Dev 2] **Implement dark theme**
+
+  - Set body background to #1a1a2e, text to white  - Set body background to #1a1a2e, text to white
+
+  - Configure fonts: Inter (body), Space Grotesk (headers), JetBrains Mono (code)  - Configure fonts: Inter (body), Space Grotesk (headers), JetBrains Mono (code)
+
+  - Create consistent spacing scale: 4px base unit  - Create consistent spacing scale: 4px base unit
+
+
+
+- [ ] **1.15** [Dev 2] **Create animated background**- [ ] **1.15** [Dev 2] **Create animated background**
+
+  - Implement Three.js particle system or use particles.js  - Implement Three.js particle system or use particles.js
+
+  - Add floating geometric shapes with subtle rotation  - Add floating geometric shapes with subtle rotation
+
+  - Ensure 60fps performance with requestAnimationFrame  - Ensure 60fps performance with requestAnimationFrame
+
+
+
+- [ ] **1.16** [Dev 2] **Build component library**- [ ] **1.16** [Dev 2] **Build component library**
+
+  - GlassCard: glass morphism container with customizable padding  - GlassCard: glass morphism container with customizable padding
+
+  - GlassButton: interactive button with hover state lifting effect  - GlassButton: interactive button with hover state lifting effect
+
+  - SkeletonLoader: pulsing placeholder for async content  - SkeletonLoader: pulsing placeholder for async content
+
+  - Add Framer Motion page transitions (300ms ease-out)  - Add Framer Motion page transitions (300ms ease-out)
+
+
+
+**HOUR 8 GIT MERGE:** All developers merge to develop branch**HOUR 8 GIT MERGE:** All developers merge to develop branch
+
+
+
+## Phase 2: Core Features (Hours 8-16)## Phase 2: Core Features (Hours 8-16)
+
+
+
+### 2.0 Genomic Data Management (FR-007 to FR-014)### 2.0 Genomic Data Management (FR-007 to FR-014)
+
+
+
+- [ ] **2.1** [Dev 1] **Create genome upload component**- [ ] **2.1** [Dev 1] **Create genome upload component**
+
+  - Accept JSON file upload with drag-and-drop  - Accept JSON file upload with drag-and-drop
+
+  - Validate structure: check for required fields (BRCA1, BRCA2, CYP2D6)  - Validate structure: check for required fields (BRCA1, BRCA2, CYP2D6)
+
+  - Display file preview with syntax highlighting  - Display file preview with syntax highlighting
+
+  - Show upload progress with percentage  - Show upload progress with percentage
+
+
+
+- [ ] **2.2** [Dev 3] **Implement encryption service**- [ ] **2.2** [Dev 3] **Implement encryption service**
+
+  - Use crypto-js for AES-256-GCM encryption  - Use crypto-js for AES-256-GCM encryption
+
+  - Generate random salt and IV for each encryption  - Generate random salt and IV for each encryption
+
+  - Return encrypted data with salt, IV, and auth tag  - Return encrypted data with salt, IV, and auth tag
+
+  - Never store unencrypted genomic data  - Never store unencrypted genomic data
+
+
+
+- [ ] **2.3** [Dev 3] **Create IPFS service**- [ ] **2.3** [Dev 3] **Create IPFS service**
+
+  - Initialize Pinata client with API keys  - Initialize Pinata client with API keys
+
+  - Pin encrypted JSON with metadata (patient ID, timestamp)  - Pin encrypted JSON with metadata (patient ID, timestamp)
+
+  - Verify pinning success with getPinByHash  - Verify pinning success with getPinByHash
+
+  - Store IPFS CID in database with commitment hash  - Store IPFS CID in database with commitment hash
+
+
+
+### 2.1 Proof Generation System (FR-015 to FR-023)### 2.1 Proof Generation System (FR-015 to FR-023)
+
+
+
+- [ ] **2.4** [Dev 4] **Complete ZK circuits**n- [ ] **2.4** [Dev 4] **Complete ZK circuits**
+
+- [ ] **2.5** [Dev 4] **Build ProofSDK TypeScript wrapper**  - BRCA1: boolean proof for mutation detection
+
+- [ ] **2.6** [Dev 3] **Set up proof generation queue**  - BRCA2: boolean proof with same logic
+
   - CYP2D6: metabolizer status (poor/intermediate/normal/rapid/ultrarapid)
-  - All circuits output proof hash and verification key
+
+... (task list continues in repo attachments)  - All circuits output proof hash and verification key
+
 
 - [ ] **2.5** [Dev 4] **Build ProofSDK TypeScript wrapper**
   - Export functions: generateBRCA1Proof, generateBRCA2Proof, generateCYP2D6Proof
