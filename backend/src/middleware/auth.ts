@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '@config/index';
 import { AuthenticationError, AuthorizationError } from '@utils/errors';
-import { User } from '@types/index';
+import { User } from '@types';
 
 export const authenticate = async (
   req: Request,
