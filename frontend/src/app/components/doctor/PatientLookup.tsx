@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
+import { useState, ChangeEvent, FormEvent } from 'react'
 
 type PatientLookupProps = {
   onRequest?: (address: string) => void
 }
 
-export function PatientLookup({ onRequest }: PatientLookupProps) {
+export function PatientLookup({ onRequest }: PatientLookupProps): JSX.Element {
   const [address, setAddress] = useState('')
   const [touched, setTouched] = useState(false)
 
   const isValidAddress = (addr: string) => /^0x[a-fA-F0-9]{40}$/.test(addr.trim())
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setTouched(true)
     if (!address) return
@@ -32,7 +32,7 @@ export function PatientLookup({ onRequest }: PatientLookupProps) {
           aria-label="Patient wallet address"
           aria-invalid={showError}
           value={address}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAddress(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setAddress(e.target.value)}
           onBlur={() => setTouched(true)}
           placeholder="0x..."
           className="input"
@@ -62,3 +62,5 @@ export function PatientLookup({ onRequest }: PatientLookupProps) {
     </div>
   )
 }
+
+export default PatientLookup
