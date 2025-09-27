@@ -28,23 +28,23 @@ export const PatientDashboard = ({ genomeSummary, showProofForm }: PatientDashbo
     <div className="patient-dashboard">
       <div className="genome-summary">
         <div className="summary-header">
-          <h3>genome data summary</h3>
-          <span className="upload-status success">uploaded</span>
+          <h3>Genome Data Summary</h3>
+          <span className="upload-status success">Uploaded</span>
         </div>
         
         <div className="info-item">
-          <span className="info-label">ipfs cid</span>
+          <span className="info-label">IPFS CID</span>
           <code className="info-value">{genomeSummary.cid}</code>
         </div>
         
         <div className="info-item">
-          <span className="info-label">uploaded</span>
+          <span className="info-label">Uploaded</span>
           <span className="info-value">{new Date(genomeSummary.uploadedAt!).toLocaleDateString()}</span>
         </div>
       </div>
       
       <div className="trait-selection">
-        <h3>available traits</h3>
+        <h3>Available Traits</h3>
         <div className="trait-grid">
           {genomeSummary.markers.map(marker => (
             <button 
@@ -62,7 +62,7 @@ export const PatientDashboard = ({ genomeSummary, showProofForm }: PatientDashbo
       
       {showProofForm && selectedTrait && !activeJobId && (
         <div className="proof-generation-form">
-          <h3>generate proof for {selectedTrait}</h3>
+          <h3>Generate Proof for {selectedTrait}</h3>
           <p className="trait-description">
             {genomeSummary.markers.find(m => m.id === selectedTrait)?.description}
           </p>
@@ -72,12 +72,12 @@ export const PatientDashboard = ({ genomeSummary, showProofForm }: PatientDashbo
       
       {activeJobId && proofJob && (
         <div className="proof-progress">
-          <h3>proof generation: {proofJob.traitType}</h3>
+          <h3>Proof Generation: {proofJob.traitType}</h3>
           <div className="progress-container">
             <div className="progress-bar" style={{ width: `${proofJob.progress}%` }}></div>
           </div>
           <div className="progress-status">
-            <span className="status-label">status:</span>
+            <span className="status-label">Status:</span>
             <span className="status-value">{proofJob.status}</span>
             <span className="progress-percentage">{Math.round(proofJob.progress)}%</span>
           </div>
@@ -86,7 +86,7 @@ export const PatientDashboard = ({ genomeSummary, showProofForm }: PatientDashbo
       
       {proofHistory && proofHistory.length > 0 && (
         <div className="proof-history">
-          <h3>recent proofs</h3>
+          <h3>Recent Proofs</h3>
           <div className="proof-list">
             {proofHistory.slice(0, 5).map(proof => (
               <div key={proof.id} className="proof-item">
