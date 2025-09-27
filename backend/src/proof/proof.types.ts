@@ -49,8 +49,16 @@ export interface ProofJobData {
 export interface ProofJobResult {
   proofId: string;
   proofHash: string;
+  proof: string;
+  publicInputs: string[];
+  verificationKey: string;
   status: ProofStatus;
   timestamp: number;
+  metadata?: {
+    circuitId: string;
+    generationTime: number;
+    gasEstimate: number;
+  };
 }
 
 export interface ZKProof {

@@ -66,9 +66,6 @@ tmp/
 postgres_data/
 redis_data/
 
-# Documentation files (markdown)
-*.md
-**/*.md
 
 # Backup files
 *.backup

@@ -31,7 +31,7 @@ router.post(
 );
 
 router.get(
-  '/history',
+  '/history/:doctorId',
   authenticate,
   authorize('doctor'),
   asyncHandler(verificationController.history.bind(verificationController))

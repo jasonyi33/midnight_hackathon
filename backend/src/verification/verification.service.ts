@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { query, queryActive } from '@config/database';
-import { VerificationRequest } from '@types/index';
+import { VerificationRequest } from '@types';
 import { NotFoundError, AuthorizationError } from '@utils/errors';
 import { logger } from '@utils/logger';
 
@@ -98,19 +98,29 @@ export class VerificationService {
     return result[0];
   }
 
+  /**
+   * Get request history for a doctor
+   * Implements FR-036: Maintain request history with timestamps and outcomes
+   */
   async getRequestHistory(doctorId: string): Promise<VerificationRequest[]> {
     const history = await queryActive<VerificationRequest>(
-      `SELECT vr.*, u.wallet_address as patient_address
+      `SELECT vr.*,
+              u.wallet_address as patient_address,
+              p.proof_hash as verification_proof,
+              p.verified_at as verification_date
        FROM verification_requests vr
        JOIN users u ON u.id = vr.patient_id
+       LEFT JOIN proofs p ON p.proof_hash = vr.proof_hash
        WHERE vr.doctor_id = $1
-       ORDER BY vr.created_at DESC
-       LIMIT 100`,
+       ORDER BY vr.created_at DESC`,
       [doctorId]
     );
 
+    logger.info(`Retrieved ${history.length} request history items for doctor ${doctorId}`);
+
     return history;
   }
+
 }
 
 export const verificationService = new VerificationService();

@@ -84,8 +84,19 @@ export class VerificationController {
     });
   }
 
-  async history(req: Request, res: Response) {
-    const doctorId = req.user!.id;
+  async history(req: Request<{ doctorId: string }>, res: Response) {
+    const { doctorId } = req.params;
+
+    // Verify the requesting doctor can only access their own history
+    if (req.user!.id !== doctorId && req.user!.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        error: {
+          code: 'FORBIDDEN',
+          message: 'You can only access your own request history'
+        }
+      });
+    }
 
     const history = await verificationService.getRequestHistory(doctorId);
 
