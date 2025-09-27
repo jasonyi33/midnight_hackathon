@@ -86,7 +86,7 @@ export class GenomeController {
       });
     }
 
-    res.json({
+    return res.json({
       success: true,
       data: {
         genomicData,

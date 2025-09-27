@@ -29,7 +29,7 @@ export const proofGenerationLimiter = rateLimit({
   legacyHeaders: false,
   skipSuccessfulRequests: false,
   keyGenerator: (req) => {
-    return req.user?.id || req.ip;
+    return req.user?.id || req.ip || 'anonymous';
   }
 });
 

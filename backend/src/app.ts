@@ -6,7 +6,7 @@ import { config } from '@config/index';
 import { errorHandler } from '@middleware/errorHandler';
 import { requestLogger } from '@middleware/requestLogger';
 import { generalLimiter } from '@middleware/rateLimiter';
-import { logger } from '@utils/logger';
+// import { logger } from '@utils/logger';
 
 import authRoutes from './auth/auth.routes';
 import proofRoutes from './proof/proof.routes';
@@ -51,7 +51,7 @@ export function createApp(): Application {
   app.use(generalLimiter);
 
   // Health check endpoint
-  app.get('/health', (req, res) => {
+  app.get('/health', (_req, res) => {
     res.json({
       status: 'healthy',
       timestamp: Date.now(),
@@ -68,7 +68,7 @@ export function createApp(): Application {
   app.use('/api/balance', balanceRoutes);
 
   // 404 handler
-  app.use((req, res) => {
+  app.use((_req, res) => {
     res.status(404).json({
       success: false,
       error: {

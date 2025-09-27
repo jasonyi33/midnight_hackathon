@@ -58,7 +58,7 @@ export class BackupService {
       return encryptedPath;
     } catch (error) {
       logger.error('Backup failed:', error);
-      await this.logBackup(backupPath, 'failed', error.message);
+      await this.logBackup(backupPath, 'failed', (error as Error).message);
       throw error;
     }
   }
@@ -122,11 +122,12 @@ export class BackupService {
       let iv: Buffer;
       let isFirstChunk = true;
 
-      input.on('data', (chunk: Buffer) => {
+      input.on('data', (chunk: string | Buffer) => {
+        const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
         if (isFirstChunk) {
           // Extract IV from the beginning
-          iv = chunk.subarray(0, 16);
-          const encryptedData = chunk.subarray(16);
+          iv = buffer.subarray(0, 16);
+          const encryptedData = buffer.subarray(16);
 
           const decipher = createCipheriv('aes-256-cbc', this.encryptionKey, iv);
 

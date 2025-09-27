@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const connectWalletSchema = z.object({
   body: z.object({
-    walletAddress: z.string().regex(/^[a-zA-Z0-9]+$/),
+    walletAddress: z.string().regex(/^[a-zA-Z0-9_]+$/),
     signature: z.string(),
     message: z.string()
   })

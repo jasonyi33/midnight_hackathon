@@ -15,6 +15,7 @@ export class IPFSService {
   private pinataApi: AxiosInstance;
   private readonly PINATA_BASE_URL = 'https://api.pinata.cloud';
   private readonly GATEWAY_URL = 'https://gateway.pinata.cloud/ipfs';
+  private mockStorage: Map<string, string> = new Map();
 
   constructor() {
     // Get Pinata credentials from environment
@@ -208,10 +209,8 @@ export class IPFSService {
     const hash = crypto.createHash('sha256').update(JSON.stringify(data)).digest('hex');
     const mockCid = `Qm${hash.substring(0, 44)}`; // Mock IPFS CID format
 
-    // Store in memory or local storage for development
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(mockCid, JSON.stringify(data));
-    }
+    // Store in memory for development
+    this.mockStorage.set(mockCid, JSON.stringify(data));
 
     logger.info(`[MOCK] Data pinned with CID: ${mockCid}`);
     return mockCid;
@@ -221,11 +220,9 @@ export class IPFSService {
    * Mock get for development
    */
   private mockGet(cid: string): any {
-    if (typeof localStorage !== 'undefined') {
-      const data = localStorage.getItem(cid);
-      if (data) {
-        return JSON.parse(data);
-      }
+    const data = this.mockStorage.get(cid);
+    if (data) {
+      return JSON.parse(data);
     }
 
     // Return mock genomic data

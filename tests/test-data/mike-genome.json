@@ -1,0 +1,53 @@
+{
+  "patientId": "mike_test_002",
+  "uploadDate": "2024-10-25T11:00:00Z",
+  "labName": "Precision Genomics",
+  "sequencingMethod": "Illumina HiSeq",
+  "qualityScore": 0.98,
+  "markers": {
+    "BRCA1_185delAG": false,
+    "BRCA1_5266dupC": false,
+    "BRCA1_1294del40": false,
+    "BRCA2_6174delT": false,
+    "BRCA2_3036del4": false,
+    "CYP2D6": {
+      "activityScore": 0.5,
+      "metabolizer": "poor",
+      "alleles": ["*4", "*4"]
+    },
+    "HER2": {
+      "amplification": false,
+      "score": 1
+    }
+  },
+  "traits": {
+    "BRCA1": {
+      "mutation_present": false,
+      "confidence": 0.99,
+      "clinical_significance": "benign"
+    },
+    "BRCA2": {
+      "mutation_present": false,
+      "confidence": 0.99,
+      "clinical_significance": "benign"
+    },
+    "CYP2D6": {
+      "metabolizer_status": "poor",
+      "confidence": 0.98,
+      "drug_implications": [
+        "Avoid codeine - ineffective",
+        "Consider alternative pain management",
+        "Risk of treatment failure with tramadol"
+      ]
+    }
+  },
+  "metadata": {
+    "version": "1.0",
+    "reference_genome": "GRCh38",
+    "coverage_depth": 35,
+    "quality_metrics": {
+      "q30_bases": 0.94,
+      "gc_content": 0.40
+    }
+  }
+}

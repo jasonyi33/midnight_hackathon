@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { createHash } from 'crypto';
 import { config } from '@config/index';
 import { query, queryActive } from '@config/database';
-import { AuthTokens, User } from '@types/index';
+import { AuthTokens, User } from '../types';
 import { AuthenticationError } from '@utils/errors';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -51,9 +51,19 @@ export class AuthService {
     }
 
     // Generate deterministic user ID from wallet address (FR-002)
-    const deterministicId = createHash('sha256')
+    // Convert SHA256 hash to UUID format to satisfy database constraints
+    const hash = createHash('sha256')
       .update(walletAddress.toLowerCase())
       .digest('hex');
+    
+    // Convert 64-char hex to UUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    const deterministicId = [
+      hash.substring(0, 8),
+      hash.substring(8, 12),
+      hash.substring(12, 16),
+      hash.substring(16, 20),
+      hash.substring(20, 32)
+    ].join('-');
 
     // Check if user exists (excluding soft deleted)
     let users = await queryActive<User>(

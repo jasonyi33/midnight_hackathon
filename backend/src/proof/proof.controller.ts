@@ -32,7 +32,7 @@ export class ProofController {
 
     const { jobId, estimatedTime } = await proofService.queueProofGeneration(userId, input);
 
-    res.json({
+    return res.json({
       success: true,
       data: {
         jobId,

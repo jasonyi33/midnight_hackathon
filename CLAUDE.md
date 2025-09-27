@@ -753,3 +753,9 @@ grep -r "TODO\|FIXME" src/
 - SDK Integration: Check with Dev 4 for ProofSDK
 - Exclusively do Dev 3 tasks. Always refer to @genomic-privacy-task-list.md and @merged-genomic-prd.md as context for what to do and the requirements necessary. Also always use @"process-task-list (1).md" as the strategy for how to implement these tasks
 - no longer focus on just dev 3. you are all devs
+- add this as our framework for coding: Ask Claude to write tests based on expected input/output pairs. Be explicit about the fact that you’re doing test-driven development so that it avoids creating mock implementations, even for functionality that doesn’t exist yet in the codebase.
+Tell Claude to run the tests and confirm they fail. Explicitly telling it not to write any implementation code at this stage is often helpful.
+Ask Claude to commit the tests when you’re satisfied with them.
+Ask Claude to write code that passes the tests, instructing it not to modify the tests. Tell Claude to keep going until all tests pass. It will usually take a few iterations for Claude to write code, run the tests, adjust the code, and run the tests again.
+At this stage, it can help to ask it to verify with independent subagents that the implementation isn’t overfitting to the tests
+Ask Claude to commit the code once you’re satisfied with the changes.

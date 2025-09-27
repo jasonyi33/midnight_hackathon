@@ -8,7 +8,7 @@ import { proofQueue, redis } from '@config/redis';
 import { ProofSDK as RealProofSDK } from '../../../contracts/src/proof-sdk/real-proof-sdk';
 import { GeneticMarker, Proof } from './mock-proof-sdk'; // Keep types from mock for compatibility
 import { ProofGenerationInput, ProofJob } from './proof.types';
-import { ProofResult } from '@types/index';
+import { ProofResult } from '../types';
 import { NotFoundError, ValidationError } from '@utils/errors';
 import { logger } from '@utils/logger';
 import { genomeService } from '@genome/genome.service';

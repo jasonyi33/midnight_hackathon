@@ -7,9 +7,9 @@ export const errorHandler = (
   err: Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
-  const requestId = req.requestId || uuidv4();
+  const requestId = (req as any).requestId || uuidv4();
 
   if (err instanceof AppError) {
     logger.error({

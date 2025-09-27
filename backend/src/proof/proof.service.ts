@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { proofQueue } from '@config/redis';
 import { redis } from '@config/redis';
 import { ProofGenerationInput, ProofJob } from './proof.types';
-import { ProofResult } from '@types/index';
+import { ProofResult } from '../types';
 import { NotFoundError } from '@utils/errors';
 import { logger } from '@utils/logger';
 
