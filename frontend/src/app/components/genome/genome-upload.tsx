@@ -119,9 +119,9 @@ export const GenomeUpload = () => {
           <button 
             type="submit" 
             disabled={isPending || !preview || !!errors.file}
-            className="primary"
+            className="form-button"
           >
-            {isPending ? 'Encrypting & uploading...' : 'Upload & encrypt'}
+            {isPending ? 'encrypting & uploading...' : 'upload & encrypt'}
           </button>
         </div>
       </form>
