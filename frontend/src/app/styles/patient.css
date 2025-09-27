@@ -1,0 +1,421 @@
+/* patient dashboard styles */
+.patient-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.genome-summary {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.summary-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.upload-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.upload-status.success {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.info-label {
+  width: 80px;
+  opacity: 0.7;
+}
+
+.info-value {
+  font-family: 'JetBrains Mono', monospace;
+  word-break: break-all;
+}
+
+.trait-selection {
+  margin-top: 0.5rem;
+}
+
+.trait-selection h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.trait-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.trait-button {
+  background: rgba(108, 99, 255, 0.1);
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.trait-button:hover:not(:disabled) {
+  background: rgba(108, 99, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.trait-button.selected {
+  background: rgba(108, 99, 255, 0.25);
+  border-color: rgba(108, 99, 255, 0.6);
+  box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.25);
+}
+
+.trait-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.trait-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.trait-desc {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-top: 0.25rem;
+}
+
+.proof-generation-form {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.trait-description {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.progress-container {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #6c63ff, #00d9ff);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.progress-status {
+  display: flex;
+  font-size: 0.9rem;
+  align-items: center;
+}
+
+.status-label {
+  opacity: 0.7;
+  margin-right: 0.5rem;
+}
+
+.progress-percentage {
+  margin-left: auto;
+  font-weight: 600;
+}
+
+.proof-history {
+  margin-top: 1rem;
+}
+
+.proof-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.proof-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.proof-trait {
+  font-weight: 500;
+}
+
+.proof-date {
+  margin-left: auto;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.proof-status {
+  margin-left: 1rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.proof-status.valid {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.proof-status.revoked {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+/* consent manager styles */
+.consent-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.request-section h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.request-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.request-item {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.request-item.approved {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.request-item.denied {
+  border-color: rgba(239, 68, 68, 0.3);
+  opacity: 0.8;
+}
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.doctor-name {
+  font-weight: 600;
+}
+
+.request-date, .expiry-date {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.request-traits {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.trait-pill {
+  background: rgba(108, 99, 255, 0.2);
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+}
+
+.request-purpose {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+.request-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.approve-button, .deny-button, .revoke-button, .cancel-button {
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.approve-button {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.approve-button:hover {
+  background: rgba(16, 185, 129, 0.3);
+}
+
+.deny-button, .cancel-button {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.deny-button:hover, .cancel-button:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.revoke-button {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.revoke-button:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.approval-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: #1a1a2e;
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 400px;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+}
+
+.form-group {
+  margin: 1.5rem 0;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input[type="range"] {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 2rem 0;
+  opacity: 0.7;
+}
+
+.muted-text {
+  opacity: 0.7;
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+/* add these to the main css file */
+.proof-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.form-group select,
+.form-group input {
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: white;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+  outline: none;
+  border-color: #6c63ff;
+}
+
+.form-button {
+  margin-top: 0.5rem;
+  padding: 0.6rem;
+  background: rgba(108, 99, 255, 0.2);
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.form-button:hover:not(:disabled) {
+  background: rgba(108, 99, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.form-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}

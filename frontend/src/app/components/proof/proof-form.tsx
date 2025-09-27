@@ -70,10 +70,10 @@ export const ProofForm = ({ trait, onJobCreated }: ProofFormProps) => {
       
       <button 
         type="submit" 
-        className="primary"
+        className="form-button"
         disabled={isPending}
       >
-        {isPending ? 'Generating...' : 'Generate proof'}
+        {isPending ? 'generating...' : 'generate proof'}
       </button>
     </form>
   )

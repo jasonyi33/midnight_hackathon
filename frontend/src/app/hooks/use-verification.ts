@@ -30,7 +30,7 @@ export const useVerificationRequests = () => {
 
     socket.on('verification:new', () => {
       queryClient.invalidateQueries({ queryKey: VERIFICATION_REQUESTS_KEY })
-      toast.success('New verification request received')
+      toast.success('new verification request received')
     })
 
     socket.on('verification:updated', () => {
@@ -47,6 +47,31 @@ export const useVerificationRequests = () => {
     queryKey: VERIFICATION_REQUESTS_KEY,
     queryFn: () => apiClient.listVerificationRequests(),
     staleTime: 30 * 1000,
+  })
+}
+
+export const useRespondToVerification = () => {
+  const queryClient = useQueryClient()
+  
+  return useMutation({
+    mutationFn: (payload: {
+      requestId: string
+      approved: boolean
+      expiryTime?: string
+    }) => {
+      return apiClient.respondToVerification({
+        requestId: payload.requestId,
+        decision: payload.approved ? 'approved' : 'denied',
+        expiresAt: payload.expiryTime
+      })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: VERIFICATION_REQUESTS_KEY })
+      toast.success('verification request updated')
+    },
+    onError: (error) => {
+      toast.error(`failed to update request: ${error instanceof Error ? error.message : 'unknown error'}`)
+    }
   })
 }
 
