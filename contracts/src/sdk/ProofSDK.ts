@@ -11,8 +11,8 @@
  *   const proof = await sdk.generateBRCA1Proof(genomeData, threshold);
  */
 
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 // Type definitions for the SDK
 export interface GenomicData {
