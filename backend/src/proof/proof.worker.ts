@@ -1,7 +1,7 @@
 import Bull from 'bull';
 import { config } from '@config/index';
 import { logger } from '@utils/logger';
-import { proofService } from './proof.service';
+import { proofIntegrationService } from './proof-integration.service';
 import { socketService } from '@websocket/socket.service';
 import { ProofJobData, ProofJobResult } from './proof.types';
 
@@ -46,8 +46,8 @@ proofQueue.process(async (job: Bull.Job<ProofJobData>) => {
     await job.progress(70);
     socketService.emitProofProgress(userId, 70);
 
-    // Step 5: Generate proof using service
-    const proof = await proofService.generateProof(
+    // Step 5: Generate proof using integration service
+    const proof = await proofIntegrationService.generateProof(
       userId,
       traitType,
       genomeCommitmentHash,

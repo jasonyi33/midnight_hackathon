@@ -5,7 +5,8 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { proofQueue, redis } from '@config/redis';
-import { createProofSDK, MockProofSDK, GeneticMarker, Proof } from './mock-proof-sdk';
+import { ProofSDK as RealProofSDK } from '../../../contracts/src/proof-sdk/real-proof-sdk';
+import { GeneticMarker, Proof } from './mock-proof-sdk'; // Keep types from mock for compatibility
 import { ProofGenerationInput, ProofJob } from './proof.types';
 import { ProofResult } from '@types/index';
 import { NotFoundError, ValidationError } from '@utils/errors';
@@ -15,11 +16,11 @@ import { db } from '@config/database';
 
 export class ProofIntegrationService {
   private readonly CACHE_TTL = 3600; // 1 hour
-  private sdk: MockProofSDK;
+  private sdk: RealProofSDK;
 
   constructor() {
-    // Initialize ProofSDK (mock or real based on environment)
-    this.sdk = createProofSDK(process.env.USE_MOCK_PROOF_SDK === 'true');
+    // Initialize RealProofSDK for production
+    this.sdk = new RealProofSDK();
     this.setupSDKListeners();
   }
 

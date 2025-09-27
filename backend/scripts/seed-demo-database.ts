@@ -251,6 +251,54 @@ async function seedDatabase() {
       console.log(`  ✅ Genome for ${patient.name}: BRCA1=${traits.brca1}, BRCA2=${traits.brca2}, CYP2D6=${traits.cyp2d6}`);
     }
 
+    // 7a. Create additional 117 anonymous BRCA records for researcher aggregation
+    console.log('\n📊 Creating 117 additional anonymous BRCA records for aggregation...');
+    for (let i = 0; i < 117; i++) {
+      const anonymousPatientId = uuidv4();
+
+      // Create anonymous patient
+      await pool.query(`
+        INSERT INTO users (id, wallet_address, role, name, email)
+        VALUES ($1, $2, $3, $4, $5)
+      `, [
+        anonymousPatientId,
+        `0x${Buffer.from(`anon${i}`).toString('hex').padEnd(40, '0')}`,
+        'patient',
+        `Anonymous Patient ${i + 11}`,
+        `anon${i + 11}@genomic.privacy`
+      ]);
+
+      // Generate random genetic profile with realistic distribution
+      const brca1 = Math.random() < 0.12; // ~12% BRCA1 positive (matches real prevalence)
+      const brca2 = Math.random() < 0.08; // ~8% BRCA2 positive
+      const cyp2d6Dist = Math.random();
+      let cyp2d6: string;
+      if (cyp2d6Dist < 0.07) cyp2d6 = 'poor';           // 7% poor metabolizers
+      else if (cyp2d6Dist < 0.35) cyp2d6 = 'intermediate'; // 28% intermediate
+      else if (cyp2d6Dist < 0.85) cyp2d6 = 'normal';      // 50% normal
+      else if (cyp2d6Dist < 0.97) cyp2d6 = 'rapid';       // 12% rapid
+      else cyp2d6 = 'ultrarapid';                          // 3% ultrarapid
+
+      const commitmentHash = `0x${Buffer.from(`anon-genome-${i}`).toString('hex').padEnd(64, '0')}`;
+      const mockCid = `Qm${Buffer.from(`anon-ipfs-${i}`).toString('hex').substring(0, 44)}`;
+
+      await pool.query(`
+        INSERT INTO genome_commitments (patient_id, commitment_hash, ipfs_cid, encrypted, traits)
+        VALUES ($1, $2, $3, $4, $5)
+      `, [
+        anonymousPatientId,
+        commitmentHash,
+        mockCid,
+        true,
+        JSON.stringify({ brca1, brca2, cyp2d6 })
+      ]);
+
+      if (i % 20 === 0) {
+        console.log(`  ⏳ Created ${i + 1}/117 anonymous records...`);
+      }
+    }
+    console.log('  ✅ Created 117 additional BRCA records for aggregation');
+
     // 8. Create historical verification requests
     console.log('\n📋 Creating verification requests...');
     const doctors = DEMO_USERS.filter(u => u.role === 'doctor');
@@ -317,6 +365,15 @@ async function seedDatabase() {
     console.log('  • 2 doctors');
     console.log('  • 1 researcher');
     console.log('  • 127 BRCA records for aggregation');
+    console.log('  • 50 verification requests');
+    console.log('  • Sample proof records');
+
+    // Display summary
+    console.log('\n📈 Seeding Summary:');
+    console.log('  • 127 total patient accounts (10 demo + 117 anonymous)');
+    console.log('  • 127 genome records with BRCA1/BRCA2/CYP2D6 data');
+    console.log('  • 2 doctor accounts');
+    console.log('  • 1 researcher account');
     console.log('  • 50 verification requests');
     console.log('  • Sample proof records');
 
