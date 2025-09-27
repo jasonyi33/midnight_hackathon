@@ -17,7 +17,10 @@
     "migrate:up": "node-pg-migrate up",
     "migrate:down": "node-pg-migrate down",
     "migrate:create": "node-pg-migrate create",
-    "queue:worker": "ts-node src/proof/proof.worker.ts"
+    "queue:worker": "ts-node src/proof/proof.worker.ts",
+    "seed:demo": "ts-node scripts/seed-demo-database.ts",
+    "generate:demo": "ts-node scripts/generate-demo-data.ts",
+    "start:all": "npm run seed:demo && npm run dev"
   },
   "dependencies": {
     "express": "^4.18.2",

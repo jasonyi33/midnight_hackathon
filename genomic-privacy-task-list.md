@@ -498,7 +498,7 @@ main → develop → feature/[frontend-patient|frontend-portals|backend|blockcha
 - [ ] **4.2** [Dev 1 & Dev 2] **Optimize performance and responsive design**
   - Test responsive breakpoints: 768px (tablet), 1024px (desktop), 1920px (wide)
   - Implement React.memo on expensive components
-  - Add lazy loading for portal routes
+  - Add lazy loading for portal route
   - Optimize bundle with code splitting
   - Ensure 60fps on all animations
 
