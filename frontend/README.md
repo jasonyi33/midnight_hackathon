@@ -16,9 +16,10 @@ What this includes (Phase 0 & 1):
 - Design system primitives: `GlassCard`, `GlassButton`, `SkeletonLoader`
 - Animated canvas background placeholder (perf-focused)
 - Simple Recharts example for researcher portal
+- Framer Motion page transitions wired for routing
 
 Next steps for Dev 2:
-- Flesh out component library and visual system
+- Flesh out component library and visual system (accessibility + variants)
 - Wire APIs with backend endpoints (Dev 3)
 - Replace canvas placeholder with Three.js particle background
-- Add Framer Motion page transitions and micro-interactions
+- Add additional micro-interactions and accessibility polish
