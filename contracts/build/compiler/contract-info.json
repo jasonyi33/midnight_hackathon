@@ -1,0 +1,71 @@
+{
+  "circuits": [
+    {
+      "name": "verify_brca1",
+      "pure": true,
+      "arguments": [
+        {
+          "name": "genome_data",
+          "type": {
+            "type-name": "Field"
+          }
+        },
+        {
+          "name": "mutation_threshold",
+          "type": {
+            "type-name": "Field"
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Field"
+      }
+    },
+    {
+      "name": "verify_brca2",
+      "pure": true,
+      "arguments": [
+        {
+          "name": "genome_data",
+          "type": {
+            "type-name": "Field"
+          }
+        },
+        {
+          "name": "mutation_threshold",
+          "type": {
+            "type-name": "Field"
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Field"
+      }
+    },
+    {
+      "name": "verify_cyp2d6",
+      "pure": true,
+      "arguments": [
+        {
+          "name": "genome_data",
+          "type": {
+            "type-name": "Field"
+          }
+        },
+        {
+          "name": "metabolizer_type",
+          "type": {
+            "type-name": "Field"
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Field"
+      }
+    }
+  ],
+  "witnesses": [
+  ],
+  "contracts": [
+  ]
+}

@@ -1,0 +1,33 @@
+/**
+ * BRCA1 mutation verification circuit
+ */
+export circuit verify_brca1(
+    genome_data: Field,
+    mutation_threshold: Field
+): Field {
+    // ZK proof logic for BRCA1 mutation detection
+    // Returns genome_data for simplicity in this initial version
+    return genome_data + mutation_threshold;
+}
+
+/**
+ * BRCA2 mutation verification circuit
+ */
+export circuit verify_brca2(
+    genome_data: Field,
+    mutation_threshold: Field
+): Field {
+    // ZK proof logic for BRCA2 mutation detection
+    return genome_data + mutation_threshold;
+}
+
+/**
+ * CYP2D6 metabolizer status verification circuit
+ */
+export circuit verify_cyp2d6(
+    genome_data: Field,
+    metabolizer_type: Field
+): Field {
+    // ZK proof for metabolizer status
+    return genome_data + metabolizer_type;
+}

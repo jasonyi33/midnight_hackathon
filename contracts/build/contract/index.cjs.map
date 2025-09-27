@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "file": "index.cjs",
+  "sourceRoot": "../../",
+  "sources": ["src/genomic_verifier.compact"],
+  "names": [],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;EAGA;;;;;;;;;;MAAA,AAAA,YAOC;;OAAA;MAKD,AAAA,YAMC;;OAAA;MAKD,AAAA,aAMC;;OAAA;;;GACA;EA9BD;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GA8BC;EA9BD,AAAA,eAOC,CANG,aAAkB,EAClB,oBAAyB;qCAIlB,aAAW,EAAG,oBAAkB;GAC1C;EAKD,AAAA,eAMC,CALG,aAAkB,EAClB,oBAAyB;qCAGlB,aAAW,EAAG,oBAAkB;GAC1C;EAKD,AAAA,gBAMC,CALG,aAAkB,EAClB,kBAAuB;qCAGhB,aAAW,EAAG,kBAAgB;GACxC;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;EA7BD,AAAA,YAOC;;;;UANG,aAAkB;UAClB,oBAAyB;;;;;;;;;;;;;;;0CADzB,aAAkB,EAClB,oBAAyB;GAK5B;EAKD,AAAA,YAMC;;;;UALG,aAAkB;UAClB,oBAAyB;;;;;;;;;;;;;;;0CADzB,aAAkB,EAClB,oBAAyB;GAI5B;EAKD,AAAA,aAMC;;;;UALG,aAAkB;UAClB,kBAAuB;;;;;;;;;;;;;;;2CADvB,aAAkB,EAClB,kBAAuB;GAI1B;;;;;;;"
+}
