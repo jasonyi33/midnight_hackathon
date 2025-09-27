@@ -82,3 +82,23 @@ redis_data/
 # package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
+
+# Ignore loose root files created during notes/experiments
+# (these are files not in a project folder and should be ignored going forward)
+building_blocks*
+CLAUDE*
+CLAUDE*.*
+CURSOR*
+cursor*
+"compact docs"*
+compact_docs*
+"compact docs"*.zip
+compact\ docs*.zip
+genomic-privacy-task-list*
+genomic_privacy_task_list*
+guidelines*
+guideline*
+merged-genomic*
+merged-genomics*
+process-task-list*
+project-task-list*
