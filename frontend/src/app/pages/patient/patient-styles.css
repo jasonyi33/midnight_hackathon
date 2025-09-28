@@ -1,0 +1,108 @@
+/* Patient Pages Shared Styles */
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+  margin: var(--space-lg) 0;
+}
+
+.stat-card {
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary-color);
+  margin-bottom: var(--space-sm);
+}
+
+.stat-value {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.recent-activity {
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--space-lg);
+}
+
+.recent-activity h3 {
+  margin-bottom: var(--space-md);
+  color: var(--text-color);
+  font-size: var(--font-size-lg);
+}
+
+/* Genome Page */
+.upload-section {
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  margin: var(--space-lg) 0;
+}
+
+.upload-box {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-xl);
+  text-align: center;
+  margin-top: var(--space-md);
+}
+
+.genome-files {
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  margin-top: var(--space-lg);
+}
+
+.file-list {
+  margin-top: var(--space-md);
+}
+
+/* Requests Page */
+.requests-tabs {
+  display: flex;
+  gap: var(--space-md);
+  margin: var(--space-lg) 0;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-xs);
+}
+
+.tab {
+  padding: var(--space-sm) var(--space-md);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-secondary-color);
+}
+
+.tab.active {
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.requests-list {
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  min-height: 200px;
+}
+
+.empty-state {
+  color: var(--text-muted-color);
+  text-align: center;
+  margin-top: var(--space-xl);
+}

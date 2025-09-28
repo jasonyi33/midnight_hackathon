@@ -13,7 +13,7 @@ html,body,#root{
 }
 
 body{
-  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-family: 'Times New Roman', serif;
 }
 
 .glass {
@@ -21,7 +21,7 @@ body{
   backdrop-filter: blur(10px);
 }
 
-.animate-pulse{ /* simple pulse for skeletons */ }
+/* Animation utilities are provided by Tailwind */
 
 /* Patient Portal Styles */
 .connection-status {

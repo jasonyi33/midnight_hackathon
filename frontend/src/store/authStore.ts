@@ -6,14 +6,18 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface User {
+export type UserRole = 'patient' | 'doctor' | 'researcher';
+
+export interface User {
   id: string;
   walletAddress: string;
-  role: 'patient' | 'doctor' | 'researcher';
+  role: UserRole;
   createdAt: string;
+  displayName?: string;
+  balance?: string;
 }
 
-interface AuthState {
+export interface AuthState {
   // State
   user: User | null;
   isAuthenticated: boolean;
@@ -30,6 +34,7 @@ interface AuthState {
   setUser: (user: User) => void;
   setTokens: (accessToken: string, refreshToken: string) => void;
   clearAuth: () => void;
+  switchRole: (role: UserRole) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -88,26 +93,38 @@ export const useAuthStore = create<AuthState>()(
           
           await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate connection delay
           
+          // Generate random tDUST balance for demo
+          const mockBalance = (Math.random() * 100).toFixed(4);
+          
           const mockUser: User = {
             id: `user_${mockWalletAddress.slice(0, 8)}`,
             walletAddress: mockWalletAddress,
             role: 'patient',
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            displayName: 'Patient Doe',
+            balance: `${mockBalance} tDUST`
           };
 
+          // Generate tokens with expiry for demo
+          const now = Date.now();
+          const accessTokenExpiry = now + (60 * 60 * 1000); // 1 hour
+          
           set({
             user: mockUser,
             isAuthenticated: true,
             status: 'connected',
-            accessToken: `mock_access_${Date.now()}`,
-            refreshToken: `mock_refresh_${Date.now()}`
+            accessToken: `mock_access_${now}`,
+            refreshToken: `mock_refresh_${now}`,
+            error: null,
+            isLoading: false
           });
 
           console.log('Mock wallet connected:', mockUser);
         } catch (error) {
           set({ 
             status: 'error', 
-            error: error instanceof Error ? error.message : 'Connection failed' 
+            error: error instanceof Error ? error.message : 'Connection failed',
+            isLoading: false
           });
           throw error;
         }
@@ -144,6 +161,28 @@ export const useAuthStore = create<AuthState>()(
           accessToken: null,
           refreshToken: null
         });
+      },
+      
+      // Switch role (demo only)
+      switchRole: (role: UserRole) => {
+        set((state) => {
+          if (!state.user) return state;
+          
+          // Generate new mock tokens for the role change
+          return {
+            ...state,
+            user: {
+              ...state.user,
+              role,
+              displayName: role === 'doctor' ? 'Dr. Smith' : 
+                           role === 'researcher' ? 'Researcher Johnson' : 
+                           'Patient Doe'
+            },
+            accessToken: `mock_access_${role}_${Date.now()}`,
+            refreshToken: `mock_refresh_${role}_${Date.now()}`
+          };
+        });
+        console.log(`Switched to ${role} role`);
       }
     }),
     {
