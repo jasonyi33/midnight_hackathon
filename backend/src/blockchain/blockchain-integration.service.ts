@@ -6,9 +6,12 @@
 import { EventEmitter } from 'events';
 import { Pool } from 'pg';
 import { io, Socket } from 'socket.io-client';
-import { logger } from '@utils/logger';
-import { createBlockchainEventService } from '@contracts/services/event-listener.service';
-import GenomicVerifierABI from '@contracts/abi/GenomicVerifier.json';
+import { logger } from '../utils/logger';
+import { GenomicVerifierABI } from './GenomicVerifierABI';
+import { createBlockchainEventService, BlockchainEventService } from './BlockchainEventService';
+// Note: Importing from local interfaces to avoid rootDir issues
+// import { createBlockchainEventService } from '../../../contracts/src/services/event-listener.service';
+// import GenomicVerifierABI from '../../../contracts/deployment.json';
 
 interface BlockchainEvent {
   type: string;
@@ -19,7 +22,7 @@ interface BlockchainEvent {
 }
 
 export class BlockchainIntegrationService extends EventEmitter {
-  private eventService: any;
+  private eventService?: BlockchainEventService;
   private db: Pool;
   private wsClient?: Socket;
   private isInitialized = false;
@@ -58,7 +61,9 @@ export class BlockchainIntegrationService extends EventEmitter {
 
     try {
       // Start blockchain event listening
-      await this.eventService.startListening();
+      if (this.eventService) {
+        await this.eventService.startListening();
+      }
 
       // Connect to WebSocket server for broadcasting
       this.connectWebSocket();
@@ -75,6 +80,8 @@ export class BlockchainIntegrationService extends EventEmitter {
    * Setup event handlers for blockchain events
    */
   private setupEventHandlers(): void {
+    if (!this.eventService) return;
+
     // Handle VerificationComplete events
     this.eventService.on('verification:complete', async (data: any) => {
       await this.handleVerificationComplete(data);

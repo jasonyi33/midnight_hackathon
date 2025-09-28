@@ -1,4 +1,5 @@
 import { createCipheriv, createDecipheriv, randomBytes, pbkdf2Sync, createHash } from 'crypto';
+import * as crypto from 'crypto';
 import { logger } from '@utils/logger';
 import { validateBRCARiskScore, validateCYP2D6ActivityScore, validateConfidenceScore } from '@utils/medicalConstants';
 import { AppError, ValidationError } from '@utils/errors';
@@ -247,7 +248,7 @@ export class GenomicEncryptionService {
       );
 
       // Create decipher
-      const decipher = createDecipheriv(encryptedData.algorithm, derivedKey, iv);
+      const decipher = createDecipheriv(encryptedData.algorithm, derivedKey, iv) as crypto.DecipherGCM;
       decipher.setAuthTag(authTag);
 
       // Decrypt data

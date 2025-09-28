@@ -1,10 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
-import { proofQueue } from '@config/redis';
-import { redis } from '@config/redis';
+import { proofQueue, redis } from '../config/redis';
 import { ProofGenerationInput, ProofJob } from './proof.types';
 import { ProofResult } from '../types';
-import { NotFoundError } from '@utils/errors';
-import { logger } from '@utils/logger';
+import { NotFoundError } from '../utils/errors';
+import { logger } from '../utils/logger';
 
 export class ProofService {
   private readonly CACHE_TTL = 3600; // 1 hour
@@ -139,7 +138,7 @@ export class ProofService {
 
   async getQueuePosition(jobId: string): Promise<number> {
     const jobs = await proofQueue.getJobs(['waiting', 'active']);
-    const position = jobs.findIndex(job => job.id === jobId);
+    const position = jobs.findIndex((job: any) => job.id === jobId);
     return position === -1 ? 0 : position + 1;
   }
 }

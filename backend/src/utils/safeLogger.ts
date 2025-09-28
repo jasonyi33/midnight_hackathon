@@ -107,7 +107,7 @@ function sanitizeData(data: any, depth = 0): any {
  */
 const sanitizeFormat = winston.format.printf(({ level, message, timestamp, ...metadata }) => {
   // Sanitize the message
-  let safeMessage = message;
+  let safeMessage: any = message;
   if (typeof message === 'string') {
     for (const pattern of GENOMIC_PATTERNS) {
       safeMessage = safeMessage.replace(pattern, '[GENOMIC_DATA]');

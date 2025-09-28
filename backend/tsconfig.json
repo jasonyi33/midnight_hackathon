@@ -25,7 +25,9 @@
       "@config/*": ["config/*"],
       "@utils/*": ["utils/*"],
       "@types/*": ["types/*"],
-      "@middleware/*": ["middleware/*"]
+      "@middleware/*": ["middleware/*"],
+      "@websocket/*": ["websocket/*"],
+      "@genome/*": ["genome/*"]
     }
   },
   "include": ["src/**/*"],

@@ -15,6 +15,16 @@ Simplicity should be a key goal in design. Choose straightforward solutions over
 
 Avoid building functionality on speculation. Implement features only when they are needed, not when you anticipate they might be useful in the future.
 
+### Write tests, commit; code, iterate, commit
+This is an Anthropic-favorite workflow for changes that are easily verifiable with unit, integration, or end-to-end tests. Test-driven development (TDD) becomes even more powerful with agentic coding:
+	1	Ask CoPilot to write tests based on expected input/output pairs. Be explicit about the fact that you’re doing test-driven development so that it avoids creating mock implementations, even for functionality that doesn’t exist yet in the codebase.
+	2	Tell Copilot to run the tests and confirm they fail. Explicitly telling it not to write any implementation code at this stage is often helpful.
+	3	Ask Copilot to commit the tests when you’re satisfied with them.
+	4	Ask Copilot to write code that passes the tests, instructing it not to modify the tests. Tell Copilot to keep going until all tests pass. It will usually take a few iterations for Copilot to write code, run the tests, adjust the code, and run the tests again.
+	1	At this stage, it can help to ask it to verify with independent subagents that the implementation isn’t overfitting to the tests
+	5	Ask Copilot to commit the code once you’re satisfied with the changes.
+Copilot performs best when it has a clear target to iterate against—a visual mock, a test case, or another kind of output. By providing expected outputs like tests, Copilot can make changes, evaluate results, and incrementally improve until it succeeds.
+
 ### Design Principles
 
 - **Dependency Inversion**: High-level modules should not depend on low-level modules. Both should depend on abstractions.

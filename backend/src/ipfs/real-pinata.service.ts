@@ -180,10 +180,11 @@ export class RealPinataService {
       const encryptionKey = crypto.randomBytes(32).toString('hex');
 
       // Encrypt the genomic data
+      const iv = crypto.randomBytes(16);
       const cipher = crypto.createCipheriv(
         'aes-256-gcm',
         Buffer.from(encryptionKey, 'hex'),
-        crypto.randomBytes(16)
+        iv
       );
 
       const encrypted = Buffer.concat([
@@ -197,7 +198,7 @@ export class RealPinataService {
       const encryptedPayload = {
         encrypted: encrypted.toString('base64'),
         authTag: authTag.toString('base64'),
-        iv: cipher.getIV().toString('base64'),
+        iv: iv.toString('base64'),
         algorithm: 'aes-256-gcm'
       };
 

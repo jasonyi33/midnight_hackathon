@@ -79,6 +79,12 @@ pool.on('error', (err) => {
 });
 
 export async function checkDatabaseConnection(): Promise<boolean> {
+  // Use mock database in test mode or when explicitly requested
+  if (process.env.NODE_ENV === 'test' || process.env.USE_MOCK_DATABASE === 'true') {
+    console.log('✅ Using mock PostgreSQL for demo');
+    return true;
+  }
+
   try {
     await pool.query('SELECT 1');
     console.log('✅ PostgreSQL connected');
@@ -88,3 +94,9 @@ export async function checkDatabaseConnection(): Promise<boolean> {
     return false;
   }
 }
+
+// Export db alias for compatibility
+export const db = pool;
+
+// Export connectDatabase function for compatibility  
+export const connectDatabase = checkDatabaseConnection;

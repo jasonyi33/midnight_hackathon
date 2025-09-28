@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { useAuthStore } from '../../stores/auth-store'
-import { laceWallet } from '../../lib/wallet/lace-wallet'
+import { useAuthStore } from '../../../store/authStore'
+// import { laceWallet } from '../../lib/wallet/lace-wallet'
 
 export type ConnectWalletGateProps = {
   requiredRole?: 'patient' | 'doctor' | 'researcher'
@@ -38,7 +38,7 @@ export const ConnectWalletGate = ({ requiredRole = 'patient' }: ConnectWalletGat
         >
           {status === 'connecting' ? 'Connecting…' : 'Connect Lace wallet'}
         </button>
-        {error ? <p className="error">{laceWallet.formatError(error)}</p> : null}
+        {error ? <p className="error">{error}</p> : null}
       </div>
     </div>
   )

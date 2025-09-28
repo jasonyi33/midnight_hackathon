@@ -11,7 +11,7 @@ import { ProofJobData, ProofJobResult } from './proof.types';
  */
 
 // Create proof queue connection
-const proofQueue = new Bull<ProofJobData, ProofJobResult>('proof-generation', {
+const proofQueue = new Bull<ProofJobData>('proof-generation', {
   redis: {
     host: new URL(config.REDIS_URL).hostname,
     port: parseInt(new URL(config.REDIS_URL).port),
@@ -28,23 +28,23 @@ proofQueue.process(async (job: Bull.Job<ProofJobData>) => {
   try {
     // Report initial progress
     await job.progress(10);
-    socketService.emitProofProgress(userId, 10);
+    socketService.emitProofProgress(userId, job.id.toString(), 10);
 
     // Step 1: Retrieve genomic data (20%)
     await job.progress(20);
-    socketService.emitProofProgress(userId, 20);
+    socketService.emitProofProgress(userId, job.id.toString(), 20);
 
     // Step 2: Validate trait data (30%)
     await job.progress(30);
-    socketService.emitProofProgress(userId, 30);
+    socketService.emitProofProgress(userId, job.id.toString(), 30);
 
     // Step 3: Generate ZK circuit (50%)
     await job.progress(50);
-    socketService.emitProofProgress(userId, 50);
+    socketService.emitProofProgress(userId, job.id.toString(), 50);
 
     // Step 4: Create proof (70%)
     await job.progress(70);
-    socketService.emitProofProgress(userId, 70);
+    socketService.emitProofProgress(userId, job.id.toString(), 70);
 
     // Step 5: Generate proof using integration service
     const proof = await proofIntegrationService.generateProof(
@@ -56,11 +56,11 @@ proofQueue.process(async (job: Bull.Job<ProofJobData>) => {
 
     // Step 6: Verify proof locally (90%)
     await job.progress(90);
-    socketService.emitProofProgress(userId, 90);
+    socketService.emitProofProgress(userId, job.id.toString(), 90);
 
     // Complete
     await job.progress(100);
-    socketService.emitProofProgress(userId, 100);
+    socketService.emitProofProgress(userId, job.id.toString(), 100);
 
     logger.info(`Proof generation completed for job ${job.id}`);
 

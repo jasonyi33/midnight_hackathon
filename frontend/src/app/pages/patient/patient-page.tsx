@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useAuthStore } from '../../stores/auth-store'
+import { useAuthStore } from '../../../store/authStore'
 import { WalletSummary } from '../shared/wallet-summary'
 import { GenomeUpload } from '../../components/genome/genome-upload'
 import { ProofForm } from '../../components/proof/proof-form'

@@ -18,9 +18,13 @@ export interface ProofGenerationRequest {
 }
 
 export interface ProofResult {
+  id: string;
   proof: string;
+  proofHash: string;
   publicInputs: string[];
+  publicSignals: string[];
   verificationKey: string;
+  createdAt: Date;
   metadata: {
     generationTime: number;
     circuitId: string;

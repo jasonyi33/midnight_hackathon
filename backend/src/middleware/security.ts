@@ -128,6 +128,8 @@ export const requestSizeLimiter = (req: Request, res: Response, next: NextFuncti
       }
     });
   }
+  
+  return next();
 
   next();
 };
@@ -258,7 +260,7 @@ export const ipAccessControl = (req: Request, res: Response, next: NextFunction)
     });
   }
 
-  next();
+  return next();
 };
 
 /**

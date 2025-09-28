@@ -105,6 +105,14 @@ export class SocketService {
     });
   }
 
+  // Emit proof error to user
+  emitProofError(userId: string, error: { message: string; code: string }) {
+    this.io.to(`user:${userId}`).emit('proof:error', {
+      error,
+      timestamp: Date.now()
+    });
+  }
+
   // Emit verification request to patient
   emitVerificationRequest(patientId: string, request: any) {
     this.io.to(`user:${patientId}`).emit('verification:requested', {
