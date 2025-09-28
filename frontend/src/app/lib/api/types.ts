@@ -3,14 +3,23 @@ import type { AuthTokens, UserProfile } from '../../../types/auth'
 export type TraitType = 'BRCA1' | 'BRCA2' | 'CYP2D6'
 
 export type AuthRequestPayload = {
-  address: string
+  walletAddress: string
   message: string
   signature: string
+  role?: 'patient' | 'doctor' | 'researcher'
 }
 
 export type AuthResponse = {
-  tokens: AuthTokens
-  user: UserProfile
+  success: boolean
+  data: {
+    accessToken: string
+    user: UserProfile
+  }
+  metadata: {
+    timestamp: number
+    requestId: string
+    version: string
+  }
 }
 
 export type GenomeSummary = {
@@ -26,11 +35,14 @@ export type GenomeSummary = {
 }
 
 export type GenomeUploadPayload = {
-  encryptedData: string
-  iv: string
-  salt: string
-  size: number
-  originalName: string
+  genomicData: {
+    patientId: string
+    metadata?: Record<string, any>
+    markers: Record<string, any>
+    traits: Record<string, any>
+    clinical_annotations?: Record<string, any>
+  }
+  encrypt: boolean
 }
 
 export type GenomeUploadResponse = GenomeSummary & {

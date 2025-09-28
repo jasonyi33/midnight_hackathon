@@ -52,7 +52,7 @@ class HttpApiClient implements ApiClient {
       method: 'POST',
       body: JSON.stringify(payload),
     })
-    sessionStorage.setItem('gp-access-token', result.tokens.accessToken)
+    sessionStorage.setItem('gp-access-token', result.data.accessToken)
     return result
   }
 
@@ -70,7 +70,7 @@ class HttpApiClient implements ApiClient {
   }
 
   async uploadGenome(payload: GenomeUploadPayload): Promise<GenomeUploadResponse> {
-    return this.request<GenomeUploadResponse>('/api/genome', {
+    return this.request<GenomeUploadResponse>('/api/genome/upload', {
       method: 'POST',
       body: JSON.stringify(payload),
     })
