@@ -71,14 +71,19 @@ export const useAuthStore = create<AuthState>()(
           const wallet = await laceWallet.connect()
           const { address, payload, signature } = await laceWallet.authenticate(wallet)
           const authResult = await apiClient.authenticate({
-            address,
+            walletAddress: address,
             message: payload.message,
             signature,
+            role: 'patient'
           })
           const rawBalance = await laceWallet.getBalance(wallet)
-          const tokens = authResult.tokens
+          const tokens = { 
+            accessToken: authResult.data.accessToken,
+            refreshToken: '',
+            expiresAt: Date.now() + 24 * 60 * 60 * 1000
+          }
           const profile: UserProfile = {
-            ...authResult.user,
+            ...authResult.data.user,
             balance: formatBalance(rawBalance),
           }
 

@@ -1,0 +1,46 @@
+{
+  "patientId": "test-patient-001",
+  "metadata": {
+    "version": "1.0",
+    "uploadedBy": "patient",
+    "timestamp": "2025-09-28T11:39:32.860Z"
+  },
+  "markers": {
+    "BRCA1_185delAG": false,
+    "BRCA1_5266dupC": false,
+    "BRCA2_617delT": false,
+    "BRCA2_999del5": false,
+    "CYP2D6_star1": "present",
+    "CYP2D6_star2": "absent",
+    "CYP2D6_star4": "absent"
+  },
+  "traits": {
+    "BRCA1": {
+      "mutation_present": false,
+      "variant_id": null,
+      "confidence_score": 0.98,
+      "clinical_significance": "benign"
+    },
+    "BRCA2": {
+      "mutation_present": false,
+      "variant_id": null,
+      "confidence_score": 0.96,
+      "clinical_significance": "benign"
+    },
+    "CYP2D6": {
+      "metabolizer_status": "normal",
+      "activity_score": 2,
+      "allele_function": "normal",
+      "phenotype_confidence": 0.94
+    }
+  },
+  "clinical_annotations": {
+    "risk_assessment": {
+      "breast_cancer_risk": "population_average",
+      "drug_response": {
+        "codeine": "normal_response",
+        "tamoxifen": "normal_response"
+      }
+    }
+  }
+}

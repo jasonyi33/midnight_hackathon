@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate } from '@middleware/auth';
+import { authenticateToken } from '../utils/jwt';
 import { validate } from '@middleware/validation';
 import { genomeController } from './genome.controller';
 import { genomeUploadSchema, genomeRetrieveSchema } from './genome.types';
@@ -8,7 +8,7 @@ import { asyncHandler } from '@utils/asyncHandler';
 const router = Router();
 
 // All routes require authentication
-router.use(authenticate);
+router.use(authenticateToken);
 
 /**
  * POST /api/genome/upload

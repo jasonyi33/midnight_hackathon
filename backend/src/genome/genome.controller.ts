@@ -8,8 +8,8 @@ export class GenomeController {
   /**
    * Upload genomic data (FR-007)
    */
-  async upload(req: Request<{}, {}, GenomeUploadInput>, res: Response) {
-    const userId = req.user!.id;
+  async upload(req: any, res: Response) {
+    const userId = req.user?.userId || req.user?.walletAddress;
     const { genomicData, encrypt } = req.body;
 
     const result = await genomeService.uploadGenomicData(

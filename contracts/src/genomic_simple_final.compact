@@ -1,0 +1,14 @@
+pragma language_version 0.17.0;
+import CompactStandardLibrary;
+
+// Simple genomic verification counter
+export ledger verifications: Uint<64>;
+
+constructor() {
+  verifications = 0 as Uint<64>;
+}
+
+export circuit verify_brca1(data: Uint<64>): Boolean {
+  verifications = verifications + (1 as Uint<64>);
+  return data > (100 as Uint<64>);
+}

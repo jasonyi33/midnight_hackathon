@@ -1,12 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { apiClient } from '../lib/api/client'
-import { encryptGenome } from '../lib/crypto/genome-encryption'
 import { validateGenome } from '../lib/validation/genome-schema'
 
 const GENOME_QUERY_KEY = ['genome-summary'] as const
 const GENOME_PROOFS_KEY = ['proof-records'] as const
-const PASSPHRASE = import.meta.env.VITE_GENOME_PASSPHRASE ?? 'demo-genome-secret'
 
 export const useGenomeSummary = () => {
   return useQuery({
@@ -36,13 +34,32 @@ export const useGenomeUpload = () => {
     mutationFn: async ({ file, address }: UploadArgs) => {
       const contents = await readFile(file)
       const parsed = validateGenome(JSON.parse(contents))
-      const encrypted = await encryptGenome(contents, `${PASSPHRASE}:${address}`)
+      
+      // Transform to backend format
+      const genomicData = {
+        patientId: parsed.patient.id,
+        metadata: {
+          uploadedBy: 'patient',
+          timestamp: new Date().toISOString(),
+          address: address
+        },
+        markers: parsed.markers,
+        traits: Object.keys(parsed.markers).reduce((traits, trait) => {
+          const marker = parsed.markers[trait as keyof typeof parsed.markers]
+          traits[trait] = {
+            mutation_present: marker?.present || false,
+            confidence_score: marker?.confidence || 0.95,
+            score: marker?.score || 0
+          }
+          return traits
+        }, {} as Record<string, any>),
+        clinical_annotations: {}
+      }
+      
+      // Send raw genomic data to backend for server-side encryption
       const response = await apiClient.uploadGenome({
-        encryptedData: encrypted.encryptedData,
-        iv: encrypted.iv,
-        salt: encrypted.salt,
-        size: file.size,
-        originalName: file.name,
+        genomicData,
+        encrypt: true
       })
       return { response, preview: parsed }
     },

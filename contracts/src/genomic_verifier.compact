@@ -1,33 +1,269 @@
+pragma language_version 0.17.0;
+import CompactStandardLibrary;
+
+// Ledger state (public on-chain data)
+export ledger verificationCount: Counter;
+export ledger authorizedVerifiers: Map<Address, Boolean>;
+export ledger genomeCommitments: Map<Address, Bytes<32>>;
+export ledger verificationResults: Map<Address, VerificationResult>;
+
+// Public data structures
+struct VerificationResult {
+    patientAddress: Address,
+    verifierAddress: Address,
+    traitType: Field, // 1=BRCA1, 2=BRCA2, 3=CYP2D6
+    result: Boolean,
+    timestamp: Field,
+    proofHash: Bytes<32>
+}
+
+// Contract owner (set during deployment)
+export ledger contractOwner: Address;
+export ledger paused: Boolean;
+
+// Constructor
+constructor(ownerAddress: Address) {
+    contractOwner = ownerAddress;
+    paused = false;
+    verificationCount = Counter.zero();
+}
+
+// Witness functions for private data input
+witness getGenomeData(): Bytes<256>;
+witness getPatientPrivateKey(): PrivateKey;
+witness getBRCA1Markers(): Bytes<64>;
+witness getBRCA2Markers(): Bytes<64>;
+witness getCYP2D6Markers(): Bytes<32>;
+
 /**
  * BRCA1 mutation verification circuit
+ * Proves presence/absence of pathogenic BRCA1 variants without revealing genome
  */
-export circuit verify_brca1(
-    genome_data: Field,
-    mutation_threshold: Field
-): Field {
-    // ZK proof logic for BRCA1 mutation detection
-    // Returns genome_data for simplicity in this initial version
-    return genome_data + mutation_threshold;
+export circuit verifyBRCA1Mutation(
+    patientAddress: Address,
+    verifierAddress: Address,
+    commitmentHash: Bytes<32>
+): VerificationResult {
+    // Contract must not be paused
+    assert(paused == false, "Contract is paused");
+    
+    // Verify verifier is authorized
+    assert(authorizedVerifiers.get(verifierAddress) == true, "Verifier not authorized");
+    
+    // Get private genome data
+    let genome = getGenomeData();
+    let patientKey = getPatientPrivateKey();
+    let brca1Markers = getBRCA1Markers();
+    
+    // Verify patient ownership of private key
+    assert(getAddress(patientKey) == patientAddress, "Invalid patient key");
+    
+    // Verify genome commitment matches on-chain commitment
+    let computedCommitment = sha256(genome);
+    assert(computedCommitment == commitmentHash, "Genome commitment mismatch");
+    
+    // Extract BRCA1 markers from private genome data
+    let extractedMarkers = extractBRCA1FromGenome(genome);
+    assert(extractedMarkers == brca1Markers, "BRCA1 marker mismatch");
+    
+    // Check for pathogenic variants (private computation)
+    let hasPathogenicVariant = checkBRCA1Pathogenic(brca1Markers);
+    
+    // Only disclose boolean result, not raw genome data
+    let verificationResult = disclose(hasPathogenicVariant);
+    
+    // Create proof hash
+    let proofData = concatenate(patientAddress, verifierAddress, Field.from(1));
+    let proofHash = sha256(proofData);
+    
+    // Update public ledger
+    ledger.verificationCount.increment();
+    let result = VerificationResult {
+        patientAddress: patientAddress,
+        verifierAddress: verifierAddress,
+        traitType: Field.from(1), // BRCA1
+        result: verificationResult,
+        timestamp: getCurrentTimestamp(),
+        proofHash: proofHash
+    };
+    
+    ledger.verificationResults.set(patientAddress, result);
+    
+    return result;
 }
 
 /**
  * BRCA2 mutation verification circuit
  */
-export circuit verify_brca2(
-    genome_data: Field,
-    mutation_threshold: Field
-): Field {
-    // ZK proof logic for BRCA2 mutation detection
-    return genome_data + mutation_threshold;
+export circuit verifyBRCA2Mutation(
+    patientAddress: Address,
+    verifierAddress: Address,
+    commitmentHash: Bytes<32>
+): VerificationResult {
+    assert(paused == false, "Contract is paused");
+    assert(ledger.authorizedVerifiers.get(verifierAddress) == true, "Verifier not authorized");
+    
+    let genome = getGenomeData();
+    let patientKey = getPatientPrivateKey();
+    let brca2Markers = getBRCA2Markers();
+    
+    assert(getAddress(patientKey) == patientAddress, "Invalid patient key");
+    assert(sha256(genome) == commitmentHash, "Genome commitment mismatch");
+    
+    let extractedMarkers = extractBRCA2FromGenome(genome);
+    assert(extractedMarkers == brca2Markers, "BRCA2 marker mismatch");
+    
+    let hasPathogenicVariant = checkBRCA2Pathogenic(brca2Markers);
+    let verificationResult = disclose(hasPathogenicVariant);
+    
+    let proofData = concatenate(patientAddress, verifierAddress, Field.from(2));
+    let proofHash = sha256(proofData);
+    
+    ledger.verificationCount.increment();
+    let result = VerificationResult {
+        patientAddress: patientAddress,
+        verifierAddress: verifierAddress,
+        traitType: Field.from(2), // BRCA2
+        result: verificationResult,
+        timestamp: getCurrentTimestamp(),
+        proofHash: proofHash
+    };
+    
+    ledger.verificationResults.set(patientAddress, result);
+    return result;
 }
 
 /**
  * CYP2D6 metabolizer status verification circuit
  */
-export circuit verify_cyp2d6(
-    genome_data: Field,
-    metabolizer_type: Field
-): Field {
-    // ZK proof for metabolizer status
-    return genome_data + metabolizer_type;
+export circuit verifyCYP2D6Status(
+    patientAddress: Address,
+    verifierAddress: Address,
+    commitmentHash: Bytes<32>
+): VerificationResult {
+    assert(paused == false, "Contract is paused");
+    assert(ledger.authorizedVerifiers.get(verifierAddress) == true, "Verifier not authorized");
+    
+    let genome = getGenomeData();
+    let patientKey = getPatientPrivateKey();
+    let cyp2d6Markers = getCYP2D6Markers();
+    
+    assert(getAddress(patientKey) == patientAddress, "Invalid patient key");
+    assert(sha256(genome) == commitmentHash, "Genome commitment mismatch");
+    
+    let extractedMarkers = extractCYP2D6FromGenome(genome);
+    assert(extractedMarkers == cyp2d6Markers, "CYP2D6 marker mismatch");
+    
+    // Determine metabolizer status (poor, intermediate, normal, ultra-rapid)
+    let metabolizerStatus = determineCYP2D6Status(cyp2d6Markers);
+    let statusResult = disclose(metabolizerStatus);
+    
+    let proofData = concatenate(patientAddress, verifierAddress, Field.from(3));
+    let proofHash = sha256(proofData);
+    
+    ledger.verificationCount.increment();
+    let result = VerificationResult {
+        patientAddress: patientAddress,
+        verifierAddress: verifierAddress,
+        traitType: Field.from(3), // CYP2D6
+        result: statusResult > Field.from(0), // Convert to boolean
+        timestamp: getCurrentTimestamp(),
+        proofHash: proofHash
+    };
+    
+    ledger.verificationResults.set(patientAddress, result);
+    return result;
+}
+
+/**
+ * Add authorized verifier (only owner)
+ */
+export circuit addAuthorizedVerifier(
+    witness ownerKey: PrivateKey,
+    verifierAddress: Address
+): Boolean {
+    assert(getAddress(ownerKey) == contractOwner, "Only owner can add verifiers");
+    assert(paused == false, "Contract is paused");
+    
+    ledger.authorizedVerifiers.set(verifierAddress, true);
+    return true;
+}
+
+/**
+ * Store genome commitment (patient only)
+ */
+export circuit storeGenomeCommitment(
+    witness patientKey: PrivateKey,
+    commitmentHash: Bytes<32>
+): Boolean {
+    let patientAddress = getAddress(patientKey);
+    ledger.genomeCommitments.set(patientAddress, commitmentHash);
+    return true;
+}
+
+/**
+ * Emergency pause (only owner)
+ */
+export circuit emergencyPause(
+    witness ownerKey: PrivateKey
+): Boolean {
+    assert(getAddress(ownerKey) == contractOwner, "Only owner can pause");
+    ledger.paused = true;
+    return true;
+}
+
+/**
+ * Helper functions for genomic analysis (private)
+ */
+private function extractBRCA1FromGenome(genome: Bytes<256>): Bytes<64> {
+    // Extract BRCA1 relevant segments (simplified)
+    return sliceBytes(genome, 0, 64);
+}
+
+private function extractBRCA2FromGenome(genome: Bytes<256>): Bytes<64> {
+    // Extract BRCA2 relevant segments (simplified)
+    return sliceBytes(genome, 64, 128);
+}
+
+private function extractCYP2D6FromGenome(genome: Bytes<256>): Bytes<32> {
+    // Extract CYP2D6 relevant segments (simplified)
+    return sliceBytes(genome, 128, 160);
+}
+
+private function checkBRCA1Pathogenic(markers: Bytes<64>): Boolean {
+    // Check for known pathogenic variants (simplified)
+    let pathogenicHash = sha256(markers);
+    let knownPathogenic = Bytes<32>.from("0x1234567890abcdef"); // Placeholder
+    return pathogenicHash == knownPathogenic;
+}
+
+private function checkBRCA2Pathogenic(markers: Bytes<64>): Boolean {
+    // Check for known pathogenic variants (simplified)
+    let pathogenicHash = sha256(markers);
+    let knownPathogenic = Bytes<32>.from("0xfedcba0987654321"); // Placeholder
+    return pathogenicHash == knownPathogenic;
+}
+
+private function determineCYP2D6Status(markers: Bytes<32>): Field {
+    // Determine metabolizer status based on genetic markers
+    // 0 = poor, 1 = intermediate, 2 = normal, 3 = ultra-rapid
+    let statusHash = sha256(markers);
+    // Simplified logic - in reality would check specific SNPs
+    return Field.from(2); // Default to normal metabolizer
+}
+
+private function getCurrentTimestamp(): Field {
+    // In real implementation, would get block timestamp
+    return Field.from(1609459200); // Placeholder timestamp
+}
+
+private function sliceBytes(data: Bytes<256>, start: Field, end: Field): Bytes<64> {
+    // Helper function to extract byte ranges (simplified)
+    // In real implementation would perform actual byte slicing
+    return Bytes<64>.zero(); // Placeholder
+}
+
+private function concatenate(addr1: Address, addr2: Address, value: Field): Bytes<96> {
+    // Concatenate addresses and field for proof hash
+    return Bytes<96>.zero(); // Placeholder
 }
