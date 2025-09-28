@@ -23,6 +23,8 @@
     "start:all": "npm run seed:demo && npm run dev"
   },
   "dependencies": {
+    "@noble/curves": "^2.0.1",
+    "@noble/hashes": "^2.0.1",
     "@types/form-data": "^2.2.1",
     "axios": "^1.12.2",
     "bcrypt": "^5.1.1",

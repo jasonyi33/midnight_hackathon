@@ -1,458 +1,284 @@
 /**
- * Enhanced Proof Service with ProofSDK Integration
- * Task 3.3: Integrate ProofSDK with backend
+ * Real Midnight ZK Proof Integration Service
+ * Uses compiled Compact contracts and Midnight native capabilities
  */
 
 import { v4 as uuidv4 } from 'uuid';
 import { proofQueue, redis } from '@config/redis';
-// Note: Using local interface to avoid rootDir issues
-// import { ProofSDK as RealProofSDK } from '../../../contracts/src/proof-sdk/real-proof-sdk';
+import { midnightZKProofService, GenomicData, ZKProof } from '../services/MidnightZKProofService';
+import { midnightBlockchainService } from '../services/MidnightBlockchainService';
+import { logger } from '../utils/logger';
 
-// Mock ProofSDK interface
-interface ProofSDK {
-  on(event: string, callback: (data: any) => void): void;
-  generateBRCA1Proof(input: any): Promise<any>;
-  generateBRCA2Proof(input: any): Promise<any>;
-  generateCYP2D6Proof(input: any): Promise<any>;
-  storeProofOnChain(proof: any): Promise<any>;
-  destroy(): void;
+export interface ProofGenerationRequest {
+  userId: string;
+  traitType: 'BRCA1' | 'BRCA2' | 'CYP2D6';
+  genomicData: GenomicData;
+  patientAddress: string;
+  threshold?: number;
 }
 
-class MockProofSDK implements ProofSDK {
-  private listeners: { [key: string]: ((data: any) => void)[] } = {};
-
-  on(event: string, callback: (data: any) => void): void {
-    if (!this.listeners[event]) {
-      this.listeners[event] = [];
-    }
-    this.listeners[event].push(callback);
-  }
-
-  async generateBRCA1Proof(input: any): Promise<any> {
-    return {
-      proof: "mock_proof_data",
-      publicInputs: ["0x123", "0x456"],
-      verificationKey: "mock_vk"
-    };
-  }
-
-  async generateBRCA2Proof(input: any): Promise<any> {
-    return {
-      proof: "mock_proof_data", 
-      publicInputs: ["0x789", "0xabc"],
-      verificationKey: "mock_vk"
-    };
-  }
-
-  async generateCYP2D6Proof(input: any): Promise<any> {
-    return {
-      proof: "mock_proof_data",
-      publicInputs: ["0xdef", "0x012"],
-      verificationKey: "mock_vk"
-    };
-  }
-
-  async storeProofOnChain(input: any): Promise<any> {
-    return {
-      transactionHash: "0xmocktxhash123",
-      blockNumber: 12345,
-      gasUsed: 21000
-    };
-  }
-
-  destroy(): void {
-    this.listeners = {};
-  }
+export interface ProofGenerationResult {
+  id: string;
+  proofHash: string;
+  proof: ZKProof;
+  status: 'completed' | 'failed';
+  timestamp: number;
+  txHash?: string;
 }
 
-const RealProofSDK = MockProofSDK;
-import { GeneticMarker, Proof } from './mock-proof-sdk'; // Keep types from mock for compatibility
-import { ProofGenerationInput, ProofJob } from './proof.types';
-import { ProofResult } from '../types';
-import { NotFoundError, ValidationError } from '@utils/errors';
-import { logger } from '@utils/logger';
-import { genomeService } from '@genome/genome.service';
-import { db } from '@config/database';
-
-export class ProofIntegrationService {
+/**
+ * Midnight-native proof integration service
+ * Handles ZK proof generation using real Compact circuits
+ */
+class MidnightProofIntegrationService {
   private readonly CACHE_TTL = 3600; // 1 hour
-  private sdk: ProofSDK;
+  private isInitialized = false;
 
-  constructor() {
-    // Initialize RealProofSDK for production
-    this.sdk = new RealProofSDK();
-    this.setupSDKListeners();
-  }
+  async initialize(): Promise<void> {
+    if (this.isInitialized) return;
 
-  /**
-   * Setup ProofSDK event listeners
-   */
-  private setupSDKListeners() {
-    // Listen for progress updates from SDK
-    this.sdk.on('progress', async (data: any) => {
-      await this.updateJobProgress(data.jobId, data.progress, data.stage);
-    });
-
-    // Listen for blockchain verification events
-    this.sdk.on('VerificationComplete', async (event: any) => {
-      await this.handleVerificationComplete(event);
-    });
-  }
-
-  /**
-   * Generate proof using ProofSDK (Task 3.3 implementation)
-   */
-  async generateProof(
-    userId: string,
-    traitType: string,
-    genomeCommitmentHash: string,
-    threshold?: number,
-    jobId?: string
-  ): Promise<ProofResult> {
     try {
-      // Step 1: Retrieve genomic data from database
-      const genomeData = await this.retrieveGenomeData(userId, genomeCommitmentHash);
-
-      // Step 2: Validate trait data exists
-      const marker = this.extractGeneticMarker(genomeData, traitType);
-
-      if (!marker) {
-        throw new ValidationError(`Trait ${traitType} not found in genome data`);
-      }
-
-      // Step 3: Generate proof based on trait type
-      let proof: Proof;
-
-      switch (traitType) {
-        case 'BRCA1':
-          proof = await this.sdk.generateBRCA1Proof({ marker, jobId });
-          break;
-
-        case 'BRCA2':
-          proof = await this.sdk.generateBRCA2Proof({ marker, jobId });
-          break;
-
-        case 'CYP2D6':
-          proof = await this.sdk.generateCYP2D6Proof({ marker, jobId });
-          break;
-
-        default:
-          throw new ValidationError(`Unsupported trait type: ${traitType}`);
-      }
-
-      // Step 4: Store proof on blockchain (mock or real)
-      const txHash = await this.storeProofOnChain(proof, userId);
-
-      // Step 5: Save proof to database
-      const proofResult = await this.saveProofToDatabase(
-        userId,
-        proof,
-        txHash,
-        genomeCommitmentHash
-      );
-
-      // Step 6: Cache the proof
-      await this.cacheProof(userId, traitType, proofResult);
-
-      return proofResult;
-
+      logger.info('Initializing Midnight proof integration service...');
+      
+      // Initialize blockchain connection
+      await midnightBlockchainService.initialize();
+      
+      this.isInitialized = true;
+      logger.info('✅ Midnight proof integration service initialized');
     } catch (error) {
-      logger.error(`Proof generation failed for user ${userId}:`, error);
+      logger.error('Failed to initialize proof integration service:', error);
       throw error;
     }
   }
 
   /**
-   * Retrieve genome data from database or IPFS
+   * Generate ZK proof using real Midnight circuits
    */
-  private async retrieveGenomeData(userId: string, commitmentHash: string): Promise<any> {
-    // Check if using mock data
-    if (process.env.USE_MOCK_IPFS === 'true') {
-      return this.getMockGenomeData(userId);
-    }
-
-    // Query database for genome commitment
-    const query = `
-      SELECT gc.*, u.wallet_address
-      FROM genome_commitments gc
-      JOIN users u ON u.id = gc.patient_id
-      WHERE u.id = $1 AND gc.commitment_hash = $2
-    `;
-
-    const result = await db.query(query, [userId, commitmentHash]);
-
-    if (result.rows.length === 0) {
-      throw new NotFoundError('Genome commitment');
-    }
-
-    const commitment = result.rows[0];
-
-    // For Phase 3, return mock data (in production, would fetch from IPFS)
-    return this.getMockGenomeData(userId);
-  }
-
-  /**
-   * Extract genetic marker from genome data
-   */
-  private extractGeneticMarker(genomeData: any, traitType: string): GeneticMarker | null {
-    const traits = genomeData.traits || {};
-    const markers = genomeData.markers || {};
-
-    switch (traitType) {
-      case 'BRCA1':
-        return {
-          type: 'BRCA1',
-          value: markers.BRCA1_185delAG || traits.BRCA1?.mutation_present || false,
-          metadata: {
-            confidence: traits.BRCA1?.confidence || 0.95
-          }
-        };
-
-      case 'BRCA2':
-        return {
-          type: 'BRCA2',
-          value: markers.BRCA2_5266dupC || traits.BRCA2?.mutation_present || false,
-          metadata: {
-            confidence: traits.BRCA2?.confidence || 0.95
-          }
-        };
-
-      case 'CYP2D6':
-        return {
-          type: 'CYP2D6',
-          value: markers.CYP2D6?.activityScore || 1.5,
-          metadata: {
-            metabolizer: markers.CYP2D6?.metabolizer || 'normal',
-            activityScore: markers.CYP2D6?.activityScore || 1.5
-          }
-        };
-
-      default:
-        return null;
-    }
-  }
-
-  /**
-   * Store proof on blockchain
-   */
-  private async storeProofOnChain(proof: Proof, userId: string): Promise<string> {
-    // Get patient wallet address
-    const userQuery = await db.query(
-      'SELECT wallet_address FROM users WHERE id = $1',
-      [userId]
-    );
-
-    if (userQuery.rows.length === 0) {
-      throw new NotFoundError('User');
-    }
-
-    const walletAddress = userQuery.rows[0].wallet_address;
-
-    // Store on chain (mock or real)
-    const txHash = await this.sdk.storeProofOnChain({ proof, walletAddress });
-
-    logger.info(`Proof stored on chain: ${txHash} for user ${userId}`);
-
-    return txHash;
-  }
-
-  /**
-   * Save proof to database
-   */
-  private async saveProofToDatabase(
+  async generateProof(
     userId: string,
-    proof: Proof,
-    txHash: string,
-    commitmentHash: string
-  ): Promise<ProofResult> {
-    const id = uuidv4();
+    traitType: 'BRCA1' | 'BRCA2' | 'CYP2D6',
+    genomeCommitmentHash: string,
+    threshold?: number
+  ): Promise<ProofGenerationResult> {
+    if (!this.isInitialized) {
+      await this.initialize();
+    }
 
-    const query = `
-      INSERT INTO proofs (
-        id,
-        patient_id,
-        trait_type,
-        proof_hash,
-        verification_key,
-        public_inputs,
-        tx_hash,
-        commitment_hash,
-        status,
-        created_at
-      )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW())
-      RETURNING *
-    `;
-
-    const values = [
-      id,
-      userId,
-      proof.traitType,
-      proof.proofHash,
-      proof.verificationKey,
-      JSON.stringify(proof.publicInputs),
-      txHash,
-      commitmentHash,
-      proof.status
-    ];
-
-    const result = await db.query(query, values);
-
-    return {
-      id,
-      proofHash: proof.proofHash,
-      publicInputs: proof.publicInputs || [],
-      publicSignals: proof.publicInputs || [],
-      proof: JSON.stringify(proof),
-      verificationKey: proof.verificationKey,
-      createdAt: new Date(),
-      metadata: {
-        generationTime: 0,
-        circuitId: proof.traitType || 'unknown',
-        gasEstimate: 21000
-      }
-    };
-  }
-
-  /**
-   * Handle blockchain verification complete event
-   */
-  private async handleVerificationComplete(event: any) {
-    logger.info('Verification completed on blockchain:', event);
-
-    // Update verification count
-    await db.query(
-      `UPDATE users SET verification_count = verification_count + 1
-       WHERE wallet_address = $1`,
-      [event.patientAddress]
-    );
-
-    // Add to audit log
-    await db.query(
-      `INSERT INTO audit_log (user_id, action, details, created_at)
-       VALUES (
-         (SELECT id FROM users WHERE wallet_address = $1),
-         'VERIFICATION_COMPLETE',
-         $2,
-         NOW()
-       )`,
-      [event.patientAddress, JSON.stringify(event)]
-    );
-  }
-
-  /**
-   * Update job progress in Redis
-   */
-  private async updateJobProgress(jobId: string, progress: number, stage?: string) {
+    const startTime = Date.now();
+    const proofId = uuidv4();
+    
     try {
-      const jobData = await redis.get(`job:${jobId}`);
+      logger.info(`Generating ${traitType} proof for user ${userId}...`);
 
-      if (!jobData) {
-        return; // Job not found, skip update
+      // 1. Retrieve cached genomic data (simulation - normally from IPFS)
+      const genomicData = await this.retrieveGenomicData(userId, genomeCommitmentHash);
+      
+      // 2. Estimate costs before proceeding
+      const costEstimate = await midnightBlockchainService.estimateProofCost(traitType);
+      logger.info(`Estimated cost: ${costEstimate.cost} ${costEstimate.currency}`);
+
+      // 3. Generate ZK proof using appropriate circuit
+      let proof: ZKProof;
+      
+      switch (traitType) {
+        case 'BRCA1':
+          proof = await midnightZKProofService.generateBRCA1Proof(
+            genomicData,
+            userId // using userId as patient address for now
+          );
+          break;
+        case 'BRCA2':
+          proof = await midnightZKProofService.generateBRCA2Proof(
+            genomicData,
+            userId
+          );
+          break;
+        case 'CYP2D6':
+          proof = await midnightZKProofService.generateCYP2D6Proof(
+            genomicData,
+            userId
+          );
+          break;
+        default:
+          throw new Error(`Unsupported trait type: ${traitType}`);
       }
 
-      const job = JSON.parse(jobData);
-      job.progress = progress;
-      job.status = progress === 100 ? 'completed' : 'processing';
-      job.stage = stage;
-
-      await redis.setex(
-        `job:${jobId}`,
-        this.CACHE_TTL,
-        JSON.stringify(job)
+      // 4. Submit proof to Midnight blockchain
+      const submission = await midnightBlockchainService.submitProofToChain(
+        proof,
+        traitType,
+        userId
       );
 
-      // Emit WebSocket update (will be implemented in Task 3.5)
-      // socketService.emitProofProgress(job.userId, progress);
+      // 5. Create result
+      const result: ProofGenerationResult = {
+        id: proofId,
+        proofHash: this.generateProofHash(proof),
+        proof,
+        status: submission.verified ? 'completed' : 'failed',
+        timestamp: Date.now(),
+        txHash: submission.txHash,
+      };
 
+      // 6. Cache the result
+      await this.cacheProofResult(userId, traitType, result);
+
+      const duration = Date.now() - startTime;
+      logger.info(`✅ ${traitType} proof generated successfully in ${duration}ms`, {
+        proofId,
+        txHash: submission.txHash,
+        verified: submission.verified,
+      });
+
+      return result;
+      
     } catch (error) {
-      logger.error(`Failed to update job progress for ${jobId}:`, error);
+      const duration = Date.now() - startTime;
+      logger.error(`❌ ${traitType} proof generation failed after ${duration}ms:`, error);
+      
+      throw new Error(`Proof generation failed: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
   /**
-   * Cache proof in Redis
+   * Verify proof on Midnight blockchain
    */
-  private async cacheProof(userId: string, traitType: string, proof: ProofResult) {
-    const cacheKey = `proof:${userId}:${traitType}`;
-    await redis.setex(
-      cacheKey,
-      this.CACHE_TTL,
-      JSON.stringify(proof)
-    );
-
-    logger.debug(`Cached proof for user ${userId}, trait ${traitType}`);
+  async verifyProof(proof: ZKProof): Promise<boolean> {
+    try {
+      logger.info(`Verifying proof ${proof.id} on Midnight blockchain...`);
+      
+      const isValid = await midnightZKProofService.verifyProofOnChain(proof);
+      
+      logger.info(`Proof ${proof.id} verification: ${isValid ? 'VALID' : 'INVALID'}`);
+      return isValid;
+      
+    } catch (error) {
+      logger.error(`Proof verification failed for ${proof.id}:`, error);
+      return false;
+    }
   }
 
   /**
-   * Get mock genome data for testing
+   * Get proof generation status
    */
-  private getMockGenomeData(userId: string): any {
-    // Demo data for Phase 3 testing
-    const mockData: Record<string, any> = {
-      'sarah': {
-        patientId: userId,
-        markers: {
-          BRCA1_185delAG: false,
-          BRCA2_5266dupC: false,
-          CYP2D6: {
-            activityScore: 1.5,
-            metabolizer: 'normal'
-          }
-        },
-        traits: {
-          BRCA1: { mutation_present: false, confidence: 0.98 },
-          BRCA2: { mutation_present: false, confidence: 0.99 }
-        }
-      },
-      'mike': {
-        patientId: userId,
-        markers: {
-          BRCA1_185delAG: false,
-          BRCA2_5266dupC: false,
-          CYP2D6: {
-            activityScore: 0.5,
-            metabolizer: 'poor'
-          }
-        },
-        traits: {
-          BRCA1: { mutation_present: false, confidence: 0.97 },
-          BRCA2: { mutation_present: false, confidence: 0.98 }
-        }
-      },
-      'default': {
-        patientId: userId,
-        markers: {
-          BRCA1_185delAG: true,
-          BRCA2_5266dupC: false,
-          CYP2D6: {
-            activityScore: 2.0,
-            metabolizer: 'rapid'
-          }
-        },
-        traits: {
-          BRCA1: { mutation_present: true, confidence: 0.96 },
-          BRCA2: { mutation_present: false, confidence: 0.97 }
+  async getProofStatus(userId: string, proofId: string): Promise<any> {
+    try {
+      const cacheKey = `proof_status:${userId}:${proofId}`;
+      const cached = await redis.get(cacheKey);
+      
+      if (cached) {
+        return JSON.parse(cached);
+      }
+      
+      return null;
+    } catch (error) {
+      logger.error(`Failed to get proof status for ${proofId}:`, error);
+      return null;
+    }
+  }
+
+  /**
+   * List all proofs for a user
+   */
+  async getUserProofs(userId: string): Promise<ZKProof[]> {
+    try {
+      const pattern = `proof_result:${userId}:*`;
+      const keys = await redis.keys(pattern);
+      
+      const proofs: ZKProof[] = [];
+      for (const key of keys) {
+        const data = await redis.get(key);
+        if (data) {
+          const result: ProofGenerationResult = JSON.parse(data);
+          proofs.push(result.proof);
         }
       }
-    };
-
-    // Return specific mock data based on userId or default
-    const userKey = userId.toLowerCase().includes('sarah') ? 'sarah' :
-                    userId.toLowerCase().includes('mike') ? 'mike' : 'default';
-
-    return mockData[userKey];
+      
+      return proofs.sort((a, b) => 
+        new Date(b.metadata.generatedAt).getTime() - new Date(a.metadata.generatedAt).getTime()
+      );
+      
+    } catch (error) {
+      logger.error(`Failed to get user proofs for ${userId}:`, error);
+      return [];
+    }
   }
 
   /**
-   * Clean up resources
+   * Get blockchain statistics
    */
-  destroy() {
-    if (this.sdk) {
-      this.sdk.destroy();
+  async getBlockchainStats(): Promise<any> {
+    try {
+      const contractState = await midnightBlockchainService.getContractState();
+      const walletBalance = await midnightBlockchainService.getWalletBalance();
+      
+      return {
+        contractState,
+        walletBalance,
+        timestamp: Date.now(),
+      };
+    } catch (error) {
+      logger.error('Failed to get blockchain stats:', error);
+      return null;
     }
+  }
+
+  /**
+   * Private helper methods
+   */
+  private async retrieveGenomicData(userId: string, genomeCommitmentHash: string): Promise<GenomicData> {
+    // In real implementation, this would:
+    // 1. Decrypt the IPFS data using user's key
+    // 2. Validate the commitment hash
+    // 3. Return the genomic data
+    
+    // For now, return mock data based on trait patterns
+    return {
+      patientId: userId,
+      markers: {
+        'rs334': true,     // BRCA1 related
+        'rs144848': false, // BRCA2 related  
+        'rs1065852': true, // CYP2D6 related
+      },
+      traits: {
+        BRCA1: {
+          mutation_present: false,
+          confidence_score: 0.95,
+        },
+        BRCA2: {
+          mutation_present: false,
+          confidence_score: 0.92,
+        },
+        CYP2D6: {
+          metabolizer_status: 'normal',
+          activity_score: 2.0,
+        },
+      },
+    };
+  }
+
+  private generateProofHash(proof: ZKProof): string {
+    const crypto = require('crypto');
+    const data = `${proof.id}:${proof.traitType}:${proof.proof}`;
+    return crypto.createHash('sha256').update(data).digest('hex');
+  }
+
+  private async cacheProofResult(
+    userId: string,
+    traitType: string,
+    result: ProofGenerationResult
+  ): Promise<void> {
+    const cacheKey = `proof_result:${userId}:${traitType}`;
+    await redis.setex(cacheKey, this.CACHE_TTL, JSON.stringify(result));
+  }
+
+  /**
+   * Cleanup resources
+   */
+  async destroy(): Promise<void> {
+    logger.info('Shutting down Midnight proof integration service...');
+    // Cleanup any open connections or resources
   }
 }
 
-// Export singleton instance
-export const proofIntegrationService = new ProofIntegrationService();
+export const proofIntegrationService = new MidnightProofIntegrationService();

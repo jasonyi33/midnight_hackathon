@@ -1,7 +1,7 @@
 {
-  "contractAddress": "midnight_1758943732128_cwnj0p",
+  "contractAddress": "midnight_1759055686745_k23vi1",
   "network": "testnet",
-  "deployedAt": "2025-09-27T03:28:52.129Z",
+  "deployedAt": "2025-09-28T10:34:46.746Z",
   "circuits": [
     "verify_brca1",
     "verify_brca2",
@@ -11,71 +11,51 @@
     "circuits": [
       {
         "name": "verify_brca1",
-        "pure": true,
+        "pure": false,
         "arguments": [
           {
-            "name": "genome_data",
-            "type": {
-              "type-name": "Field"
-            }
-          },
-          {
-            "name": "mutation_threshold",
+            "name": "genome_hash",
             "type": {
               "type-name": "Field"
             }
           }
         ],
         "result-type": {
-          "type-name": "Field"
+          "type-name": "Boolean"
         }
       },
       {
         "name": "verify_brca2",
-        "pure": true,
+        "pure": false,
         "arguments": [
           {
-            "name": "genome_data",
-            "type": {
-              "type-name": "Field"
-            }
-          },
-          {
-            "name": "mutation_threshold",
+            "name": "genome_hash",
             "type": {
               "type-name": "Field"
             }
           }
         ],
         "result-type": {
-          "type-name": "Field"
+          "type-name": "Boolean"
         }
       },
       {
         "name": "verify_cyp2d6",
-        "pure": true,
+        "pure": false,
         "arguments": [
           {
-            "name": "genome_data",
-            "type": {
-              "type-name": "Field"
-            }
-          },
-          {
-            "name": "metabolizer_type",
+            "name": "genome_hash",
             "type": {
               "type-name": "Field"
             }
           }
         ],
         "result-type": {
-          "type-name": "Field"
+          "type-name": "Boolean"
         }
       }
     ],
     "witnesses": [],
     "contracts": []
-  },
-  "verifiedAt": "2025-09-27T08:44:58.340Z",
-  "verificationStatus": "passed"
+  }
 }

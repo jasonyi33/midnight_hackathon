@@ -15,11 +15,31 @@ if (expectedRuntimeVersion[0] != actualRuntimeVersion[0]
 
 const _descriptor_0 = new __compactRuntime.CompactTypeField();
 
-const _descriptor_1 = new __compactRuntime.CompactTypeUnsignedInteger(255n, 1);
+const _descriptor_1 = new __compactRuntime.CompactTypeBoolean();
 
 const _descriptor_2 = new __compactRuntime.CompactTypeUnsignedInteger(18446744073709551615n, 8);
 
-const _descriptor_3 = new __compactRuntime.CompactTypeUnsignedInteger(340282366920938463463374607431768211455n, 16);
+const _descriptor_3 = new __compactRuntime.CompactTypeBytes(32);
+
+class _ContractAddress_0 {
+  alignment() {
+    return _descriptor_3.alignment();
+  }
+  fromValue(value_0) {
+    return {
+      bytes: _descriptor_3.fromValue(value_0)
+    }
+  }
+  toValue(value_0) {
+    return _descriptor_3.toValue(value_0.bytes);
+  }
+}
+
+const _descriptor_4 = new _ContractAddress_0();
+
+const _descriptor_5 = new __compactRuntime.CompactTypeUnsignedInteger(255n, 1);
+
+const _descriptor_6 = new __compactRuntime.CompactTypeUnsignedInteger(340282366920938463463374607431768211455n, 16);
 
 class Contract {
   witnesses;
@@ -33,17 +53,120 @@ class Contract {
     }
     this.witnesses = witnesses_0;
     this.circuits = {
-      verify_brca1(context, ...args_1) {
-        return { result: pureCircuits.verify_brca1(...args_1), context };
+      verify_brca1: (...args_1) => {
+        if (args_1.length !== 2) {
+          throw new __compactRuntime.CompactError(`verify_brca1: expected 2 arguments (as invoked from Typescript), received ${args_1.length}`);
+        }
+        const contextOrig_0 = args_1[0];
+        const genome_hash_0 = args_1[1];
+        if (!(typeof(contextOrig_0) === 'object' && contextOrig_0.originalState != undefined && contextOrig_0.transactionContext != undefined)) {
+          __compactRuntime.type_error('verify_brca1',
+                                      'argument 1 (as invoked from Typescript)',
+                                      'genomic_field.compact line 18 char 1',
+                                      'CircuitContext',
+                                      contextOrig_0)
+        }
+        if (!(typeof(genome_hash_0) === 'bigint' && genome_hash_0 >= 0 && genome_hash_0 <= __compactRuntime.MAX_FIELD)) {
+          __compactRuntime.type_error('verify_brca1',
+                                      'argument 1 (argument 2 as invoked from Typescript)',
+                                      'genomic_field.compact line 18 char 1',
+                                      'Field',
+                                      genome_hash_0)
+        }
+        const context = { ...contextOrig_0 };
+        const partialProofData = {
+          input: {
+            value: _descriptor_0.toValue(genome_hash_0),
+            alignment: _descriptor_0.alignment()
+          },
+          output: undefined,
+          publicTranscript: [],
+          privateTranscriptOutputs: []
+        };
+        const result_0 = this._verify_brca1_0(context,
+                                              partialProofData,
+                                              genome_hash_0);
+        partialProofData.output = { value: _descriptor_1.toValue(result_0), alignment: _descriptor_1.alignment() };
+        return { result: result_0, context: context, proofData: partialProofData };
       },
-      verify_brca2(context, ...args_1) {
-        return { result: pureCircuits.verify_brca2(...args_1), context };
+      verify_brca2: (...args_1) => {
+        if (args_1.length !== 2) {
+          throw new __compactRuntime.CompactError(`verify_brca2: expected 2 arguments (as invoked from Typescript), received ${args_1.length}`);
+        }
+        const contextOrig_0 = args_1[0];
+        const genome_hash_0 = args_1[1];
+        if (!(typeof(contextOrig_0) === 'object' && contextOrig_0.originalState != undefined && contextOrig_0.transactionContext != undefined)) {
+          __compactRuntime.type_error('verify_brca2',
+                                      'argument 1 (as invoked from Typescript)',
+                                      'genomic_field.compact line 25 char 1',
+                                      'CircuitContext',
+                                      contextOrig_0)
+        }
+        if (!(typeof(genome_hash_0) === 'bigint' && genome_hash_0 >= 0 && genome_hash_0 <= __compactRuntime.MAX_FIELD)) {
+          __compactRuntime.type_error('verify_brca2',
+                                      'argument 1 (argument 2 as invoked from Typescript)',
+                                      'genomic_field.compact line 25 char 1',
+                                      'Field',
+                                      genome_hash_0)
+        }
+        const context = { ...contextOrig_0 };
+        const partialProofData = {
+          input: {
+            value: _descriptor_0.toValue(genome_hash_0),
+            alignment: _descriptor_0.alignment()
+          },
+          output: undefined,
+          publicTranscript: [],
+          privateTranscriptOutputs: []
+        };
+        const result_0 = this._verify_brca2_0(context,
+                                              partialProofData,
+                                              genome_hash_0);
+        partialProofData.output = { value: _descriptor_1.toValue(result_0), alignment: _descriptor_1.alignment() };
+        return { result: result_0, context: context, proofData: partialProofData };
       },
-      verify_cyp2d6(context, ...args_1) {
-        return { result: pureCircuits.verify_cyp2d6(...args_1), context };
+      verify_cyp2d6: (...args_1) => {
+        if (args_1.length !== 2) {
+          throw new __compactRuntime.CompactError(`verify_cyp2d6: expected 2 arguments (as invoked from Typescript), received ${args_1.length}`);
+        }
+        const contextOrig_0 = args_1[0];
+        const genome_hash_0 = args_1[1];
+        if (!(typeof(contextOrig_0) === 'object' && contextOrig_0.originalState != undefined && contextOrig_0.transactionContext != undefined)) {
+          __compactRuntime.type_error('verify_cyp2d6',
+                                      'argument 1 (as invoked from Typescript)',
+                                      'genomic_field.compact line 32 char 1',
+                                      'CircuitContext',
+                                      contextOrig_0)
+        }
+        if (!(typeof(genome_hash_0) === 'bigint' && genome_hash_0 >= 0 && genome_hash_0 <= __compactRuntime.MAX_FIELD)) {
+          __compactRuntime.type_error('verify_cyp2d6',
+                                      'argument 1 (argument 2 as invoked from Typescript)',
+                                      'genomic_field.compact line 32 char 1',
+                                      'Field',
+                                      genome_hash_0)
+        }
+        const context = { ...contextOrig_0 };
+        const partialProofData = {
+          input: {
+            value: _descriptor_0.toValue(genome_hash_0),
+            alignment: _descriptor_0.alignment()
+          },
+          output: undefined,
+          publicTranscript: [],
+          privateTranscriptOutputs: []
+        };
+        const result_0 = this._verify_cyp2d6_0(context,
+                                               partialProofData,
+                                               genome_hash_0);
+        partialProofData.output = { value: _descriptor_1.toValue(result_0), alignment: _descriptor_1.alignment() };
+        return { result: result_0, context: context, proofData: partialProofData };
       }
     };
-    this.impureCircuits = {};
+    this.impureCircuits = {
+      verify_brca1: this.circuits.verify_brca1,
+      verify_brca2: this.circuits.verify_brca2,
+      verify_cyp2d6: this.circuits.verify_cyp2d6
+    };
   }
   initialState(...args_0) {
     if (args_0.length !== 1) {
@@ -61,7 +184,14 @@ class Contract {
     }
     const state_0 = new __compactRuntime.ContractState();
     let stateValue_0 = __compactRuntime.StateValue.newArray();
+    stateValue_0 = stateValue_0.arrayPush(__compactRuntime.StateValue.newNull());
+    stateValue_0 = stateValue_0.arrayPush(__compactRuntime.StateValue.newNull());
+    stateValue_0 = stateValue_0.arrayPush(__compactRuntime.StateValue.newNull());
+    stateValue_0 = stateValue_0.arrayPush(__compactRuntime.StateValue.newNull());
     state_0.data = stateValue_0;
+    state_0.setOperation('verify_brca1', new __compactRuntime.ContractOperation());
+    state_0.setOperation('verify_brca2', new __compactRuntime.ContractOperation());
+    state_0.setOperation('verify_cyp2d6', new __compactRuntime.ContractOperation());
     const context = {
       originalState: state_0,
       currentPrivateState: constructorContext_0.initialPrivateState,
@@ -74,6 +204,90 @@ class Contract {
       publicTranscript: [],
       privateTranscriptOutputs: []
     };
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(0n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(0n),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(1n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(0n),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(2n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(0n),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(3n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(0n),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    const tmp_0 = 0n;
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(0n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(tmp_0),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    const tmp_1 = 0n;
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(1n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(tmp_1),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    const tmp_2 = 0n;
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(2n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(tmp_2),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    const tmp_3 = 0n;
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(3n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(tmp_3),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
     state_0.data = context.transactionContext.state;
     return {
       currentContractState: state_0,
@@ -81,14 +295,152 @@ class Contract {
       currentZswapLocalState: context.currentZswapLocalState
     }
   }
-  _verify_brca1_0(genome_data_0, mutation_threshold_0) {
-    return __compactRuntime.addField(genome_data_0, mutation_threshold_0);
+  _verify_brca1_0(context, partialProofData, genome_hash_0) {
+    const tmp_0 = __compactRuntime.addField(_descriptor_0.fromValue(Contract._query(context,
+                                                                                    partialProofData,
+                                                                                    [
+                                                                                     { dup: { n: 0 } },
+                                                                                     { idx: { cached: false,
+                                                                                              pushPath: false,
+                                                                                              path: [
+                                                                                                     { tag: 'value',
+                                                                                                       value: { value: _descriptor_5.toValue(0n),
+                                                                                                                alignment: _descriptor_5.alignment() } }] } },
+                                                                                     { popeq: { cached: false,
+                                                                                                result: undefined } }]).value),
+                                            1n);
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(0n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(tmp_0),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    const tmp_1 = __compactRuntime.addField(_descriptor_0.fromValue(Contract._query(context,
+                                                                                    partialProofData,
+                                                                                    [
+                                                                                     { dup: { n: 0 } },
+                                                                                     { idx: { cached: false,
+                                                                                              pushPath: false,
+                                                                                              path: [
+                                                                                                     { tag: 'value',
+                                                                                                       value: { value: _descriptor_5.toValue(1n),
+                                                                                                                alignment: _descriptor_5.alignment() } }] } },
+                                                                                     { popeq: { cached: false,
+                                                                                                result: undefined } }]).value),
+                                            1n);
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(1n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(tmp_1),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    return true;
   }
-  _verify_brca2_0(genome_data_0, mutation_threshold_0) {
-    return __compactRuntime.addField(genome_data_0, mutation_threshold_0);
+  _verify_brca2_0(context, partialProofData, genome_hash_0) {
+    const tmp_0 = __compactRuntime.addField(_descriptor_0.fromValue(Contract._query(context,
+                                                                                    partialProofData,
+                                                                                    [
+                                                                                     { dup: { n: 0 } },
+                                                                                     { idx: { cached: false,
+                                                                                              pushPath: false,
+                                                                                              path: [
+                                                                                                     { tag: 'value',
+                                                                                                       value: { value: _descriptor_5.toValue(0n),
+                                                                                                                alignment: _descriptor_5.alignment() } }] } },
+                                                                                     { popeq: { cached: false,
+                                                                                                result: undefined } }]).value),
+                                            1n);
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(0n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(tmp_0),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    const tmp_1 = __compactRuntime.addField(_descriptor_0.fromValue(Contract._query(context,
+                                                                                    partialProofData,
+                                                                                    [
+                                                                                     { dup: { n: 0 } },
+                                                                                     { idx: { cached: false,
+                                                                                              pushPath: false,
+                                                                                              path: [
+                                                                                                     { tag: 'value',
+                                                                                                       value: { value: _descriptor_5.toValue(2n),
+                                                                                                                alignment: _descriptor_5.alignment() } }] } },
+                                                                                     { popeq: { cached: false,
+                                                                                                result: undefined } }]).value),
+                                            1n);
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(2n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(tmp_1),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    return true;
   }
-  _verify_cyp2d6_0(genome_data_0, metabolizer_type_0) {
-    return __compactRuntime.addField(genome_data_0, metabolizer_type_0);
+  _verify_cyp2d6_0(context, partialProofData, genome_hash_0) {
+    const tmp_0 = __compactRuntime.addField(_descriptor_0.fromValue(Contract._query(context,
+                                                                                    partialProofData,
+                                                                                    [
+                                                                                     { dup: { n: 0 } },
+                                                                                     { idx: { cached: false,
+                                                                                              pushPath: false,
+                                                                                              path: [
+                                                                                                     { tag: 'value',
+                                                                                                       value: { value: _descriptor_5.toValue(0n),
+                                                                                                                alignment: _descriptor_5.alignment() } }] } },
+                                                                                     { popeq: { cached: false,
+                                                                                                result: undefined } }]).value),
+                                            1n);
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(0n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(tmp_0),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    const tmp_1 = __compactRuntime.addField(_descriptor_0.fromValue(Contract._query(context,
+                                                                                    partialProofData,
+                                                                                    [
+                                                                                     { dup: { n: 0 } },
+                                                                                     { idx: { cached: false,
+                                                                                              pushPath: false,
+                                                                                              path: [
+                                                                                                     { tag: 'value',
+                                                                                                       value: { value: _descriptor_5.toValue(3n),
+                                                                                                                alignment: _descriptor_5.alignment() } }] } },
+                                                                                     { popeq: { cached: false,
+                                                                                                result: undefined } }]).value),
+                                            1n);
+    Contract._query(context,
+                    partialProofData,
+                    [
+                     { push: { storage: false,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_5.toValue(3n),
+                                                                            alignment: _descriptor_5.alignment() }).encode() } },
+                     { push: { storage: true,
+                               value: __compactRuntime.StateValue.newCell({ value: _descriptor_0.toValue(tmp_1),
+                                                                            alignment: _descriptor_0.alignment() }).encode() } },
+                     { ins: { cached: false, n: 1 } }]);
+    return true;
   }
   static _query(context, partialProofData, prog) {
     var res;
@@ -129,6 +481,62 @@ function ledger(state) {
     privateTranscriptOutputs: []
   };
   return {
+    get verifications() {
+      return _descriptor_0.fromValue(Contract._query(context,
+                                                     partialProofData,
+                                                     [
+                                                      { dup: { n: 0 } },
+                                                      { idx: { cached: false,
+                                                               pushPath: false,
+                                                               path: [
+                                                                      { tag: 'value',
+                                                                        value: { value: _descriptor_5.toValue(0n),
+                                                                                 alignment: _descriptor_5.alignment() } }] } },
+                                                      { popeq: { cached: false,
+                                                                 result: undefined } }]).value);
+    },
+    get brca1_results() {
+      return _descriptor_0.fromValue(Contract._query(context,
+                                                     partialProofData,
+                                                     [
+                                                      { dup: { n: 0 } },
+                                                      { idx: { cached: false,
+                                                               pushPath: false,
+                                                               path: [
+                                                                      { tag: 'value',
+                                                                        value: { value: _descriptor_5.toValue(1n),
+                                                                                 alignment: _descriptor_5.alignment() } }] } },
+                                                      { popeq: { cached: false,
+                                                                 result: undefined } }]).value);
+    },
+    get brca2_results() {
+      return _descriptor_0.fromValue(Contract._query(context,
+                                                     partialProofData,
+                                                     [
+                                                      { dup: { n: 0 } },
+                                                      { idx: { cached: false,
+                                                               pushPath: false,
+                                                               path: [
+                                                                      { tag: 'value',
+                                                                        value: { value: _descriptor_5.toValue(2n),
+                                                                                 alignment: _descriptor_5.alignment() } }] } },
+                                                      { popeq: { cached: false,
+                                                                 result: undefined } }]).value);
+    },
+    get cyp2d6_results() {
+      return _descriptor_0.fromValue(Contract._query(context,
+                                                     partialProofData,
+                                                     [
+                                                      { dup: { n: 0 } },
+                                                      { idx: { cached: false,
+                                                               pushPath: false,
+                                                               path: [
+                                                                      { tag: 'value',
+                                                                        value: { value: _descriptor_5.toValue(3n),
+                                                                                 alignment: _descriptor_5.alignment() } }] } },
+                                                      { popeq: { cached: false,
+                                                                 result: undefined } }]).value);
+    }
   };
 }
 const _emptyContext = {
@@ -136,74 +544,7 @@ const _emptyContext = {
   transactionContext: new __compactRuntime.QueryContext(new __compactRuntime.ContractState().data, __compactRuntime.dummyContractAddress())
 };
 const _dummyContract = new Contract({ });
-const pureCircuits = {
-  verify_brca1: (...args_0) => {
-    if (args_0.length !== 2) {
-      throw new __compactRuntime.CompactError(`verify_brca1: expected 2 arguments (as invoked from Typescript), received ${args_0.length}`);
-    }
-    const genome_data_0 = args_0[0];
-    const mutation_threshold_0 = args_0[1];
-    if (!(typeof(genome_data_0) === 'bigint' && genome_data_0 >= 0 && genome_data_0 <= __compactRuntime.MAX_FIELD)) {
-      __compactRuntime.type_error('verify_brca1',
-                                  'argument 1',
-                                  'genomic_verifier.compact line 4 char 1',
-                                  'Field',
-                                  genome_data_0)
-    }
-    if (!(typeof(mutation_threshold_0) === 'bigint' && mutation_threshold_0 >= 0 && mutation_threshold_0 <= __compactRuntime.MAX_FIELD)) {
-      __compactRuntime.type_error('verify_brca1',
-                                  'argument 2',
-                                  'genomic_verifier.compact line 4 char 1',
-                                  'Field',
-                                  mutation_threshold_0)
-    }
-    return _dummyContract._verify_brca1_0(genome_data_0, mutation_threshold_0);
-  },
-  verify_brca2: (...args_0) => {
-    if (args_0.length !== 2) {
-      throw new __compactRuntime.CompactError(`verify_brca2: expected 2 arguments (as invoked from Typescript), received ${args_0.length}`);
-    }
-    const genome_data_0 = args_0[0];
-    const mutation_threshold_0 = args_0[1];
-    if (!(typeof(genome_data_0) === 'bigint' && genome_data_0 >= 0 && genome_data_0 <= __compactRuntime.MAX_FIELD)) {
-      __compactRuntime.type_error('verify_brca2',
-                                  'argument 1',
-                                  'genomic_verifier.compact line 16 char 1',
-                                  'Field',
-                                  genome_data_0)
-    }
-    if (!(typeof(mutation_threshold_0) === 'bigint' && mutation_threshold_0 >= 0 && mutation_threshold_0 <= __compactRuntime.MAX_FIELD)) {
-      __compactRuntime.type_error('verify_brca2',
-                                  'argument 2',
-                                  'genomic_verifier.compact line 16 char 1',
-                                  'Field',
-                                  mutation_threshold_0)
-    }
-    return _dummyContract._verify_brca2_0(genome_data_0, mutation_threshold_0);
-  },
-  verify_cyp2d6: (...args_0) => {
-    if (args_0.length !== 2) {
-      throw new __compactRuntime.CompactError(`verify_cyp2d6: expected 2 arguments (as invoked from Typescript), received ${args_0.length}`);
-    }
-    const genome_data_0 = args_0[0];
-    const metabolizer_type_0 = args_0[1];
-    if (!(typeof(genome_data_0) === 'bigint' && genome_data_0 >= 0 && genome_data_0 <= __compactRuntime.MAX_FIELD)) {
-      __compactRuntime.type_error('verify_cyp2d6',
-                                  'argument 1',
-                                  'genomic_verifier.compact line 27 char 1',
-                                  'Field',
-                                  genome_data_0)
-    }
-    if (!(typeof(metabolizer_type_0) === 'bigint' && metabolizer_type_0 >= 0 && metabolizer_type_0 <= __compactRuntime.MAX_FIELD)) {
-      __compactRuntime.type_error('verify_cyp2d6',
-                                  'argument 2',
-                                  'genomic_verifier.compact line 27 char 1',
-                                  'Field',
-                                  metabolizer_type_0)
-    }
-    return _dummyContract._verify_cyp2d6_0(genome_data_0, metabolizer_type_0);
-  }
-};
+const pureCircuits = {};
 const contractReferenceLocations = { tag: 'publicLedgerArray', indices: { } };
 exports.Contract = Contract;
 exports.ledger = ledger;

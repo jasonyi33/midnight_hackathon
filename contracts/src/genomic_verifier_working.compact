@@ -1,0 +1,36 @@
+pragma language_version 0.17.0;
+import CompactStandardLibrary;
+
+// Simple enumeration for verification states
+enum VerificationState { unverified, verified }
+
+// Public ledger data
+export ledger count: Uint<64>;
+export ledger state: VerificationState;
+
+// Constructor
+constructor() {
+  count = Uint<64>.from(0);
+  state = VerificationState.unverified;
+}
+
+// Simple BRCA1 verification circuit
+export circuit verify_brca1(genome_data: Uint<64>, threshold: Uint<64>): Boolean {
+  count = count + Uint<64>.from(1);
+  state = VerificationState.verified;
+  return genome_data > threshold;
+}
+
+// Simple BRCA2 verification circuit  
+export circuit verify_brca2(genome_data: Uint<64>, threshold: Uint<64>): Boolean {
+  count = count + Uint<64>.from(1);
+  state = VerificationState.verified;
+  return genome_data > threshold;
+}
+
+// Simple CYP2D6 verification circuit
+export circuit verify_cyp2d6(genome_data: Uint<64>, metabolizer_type: Uint<64>): Boolean {
+  count = count + Uint<64>.from(1);
+  state = VerificationState.verified;
+  return genome_data == metabolizer_type;
+}

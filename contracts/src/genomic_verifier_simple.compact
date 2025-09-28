@@ -1,0 +1,52 @@
+pragma language_version 0.17.0;
+import CompactStandardLibrary;
+
+// Simple genomic verifier with basic circuits
+export ledger verificationCount: Counter;
+
+// Constructor
+constructor() {
+    verificationCount = Counter.zero();
+}
+
+/**
+ * Simple BRCA1 verification circuit
+ */
+export circuit verifyBRCA1Simple(
+    genomeData: Field,
+    threshold: Field
+): Boolean {
+    // Update counter
+    verificationCount.increment();
+    
+    // Simple computation for proof of concept
+    return genomeData > threshold;
+}
+
+/**
+ * Simple BRCA2 verification circuit
+ */
+export circuit verifyBRCA2Simple(
+    genomeData: Field,
+    threshold: Field
+): Boolean {
+    // Update counter
+    verificationCount.increment();
+    
+    // Simple computation for proof of concept
+    return genomeData > threshold;
+}
+
+/**
+ * Simple CYP2D6 verification circuit
+ */
+export circuit verifyCYP2DSimple(
+    genomeData: Field,
+    metabolizerType: Field
+): Boolean {
+    // Update counter
+    verificationCount.increment();
+    
+    // Simple computation for proof of concept
+    return genomeData == metabolizerType;
+}
