@@ -33,22 +33,22 @@ export const ProofForm = ({ trait, onJobCreated }: ProofFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="proof-form">
       <div className="form-group">
-        <label htmlFor="proofType">Proof type</label>
+        <label htmlFor="proofType">Proof Type</label>
         <select 
           id="proofType" 
           value={proofType}
           onChange={(e) => setProofType(e.target.value as ProofType)}
           disabled={isPending}
         >
-          <option value="boolean">Boolean (present/absent)</option>
-          <option value="range">Range (score below threshold)</option>
-          <option value="set">Set membership</option>
+          <option value="boolean">Boolean (Present/Absent)</option>
+          <option value="range">Range (Score Below Threshold)</option>
+          <option value="set">Set Membership</option>
         </select>
       </div>
       
       {proofType === 'range' && (
         <div className="form-group">
-          <label htmlFor="threshold">Threshold value</label>
+          <label htmlFor="threshold">Threshold Value</label>
           <div className="range-control">
             <input 
               type="range" 
@@ -70,10 +70,10 @@ export const ProofForm = ({ trait, onJobCreated }: ProofFormProps) => {
       
       <button 
         type="submit" 
-        className="primary"
+        className="form-button"
         disabled={isPending}
       >
-        {isPending ? 'Generating...' : 'Generate proof'}
+        {isPending ? 'Generating...' : 'Generate Proof'}
       </button>
     </form>
   )

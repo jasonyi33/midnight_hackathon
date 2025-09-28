@@ -70,7 +70,7 @@ export const GenomeUpload = () => {
   if (genomeSummary?.cid) {
     return (
       <div className="genome-status">
-        <h3>Genome already uploaded</h3>
+        <h3>Genome Already Uploaded</h3>
         <div className="genome-details">
           <div className="data-row">
             <span className="label">IPFS CID</span>
@@ -100,7 +100,7 @@ export const GenomeUpload = () => {
         >
           <input {...getInputProps()} {...register('file')} />
           {isDragActive ? (
-            <p>Drop the genome JSON here ...</p>
+            <p>Drop the Genome JSON here ...</p>
           ) : (
             <p>Drag & drop your genome JSON file here, or click to select</p>
           )}
@@ -119,9 +119,9 @@ export const GenomeUpload = () => {
           <button 
             type="submit" 
             disabled={isPending || !preview || !!errors.file}
-            className="primary"
+            className="form-button"
           >
-            {isPending ? 'Encrypting & uploading...' : 'Upload & encrypt'}
+            {isPending ? 'Encrypting & Uploading...' : 'Upload & Encrypt'}
           </button>
         </div>
       </form>
