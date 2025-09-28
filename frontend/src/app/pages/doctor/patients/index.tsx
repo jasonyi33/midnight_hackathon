@@ -6,7 +6,7 @@ import "../doctor-styles.css";
  */
 export const DoctorPatients = () => {
   return (
-    <Layout title="My Patients" role="doctor">
+    <Layout role="doctor">
       <div className="doctor-patients">
         <h2>Patient Management</h2>
         <p>View and manage your patients' information.</p>

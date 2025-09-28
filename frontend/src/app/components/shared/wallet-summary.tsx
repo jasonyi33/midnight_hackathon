@@ -32,19 +32,25 @@ export const WalletSummary = ({ user, showRoleSwitcher = true }: WalletSummaryPr
   return (
     <div className="wallet-container">
       <div className="wallet-summary">
-        <div>
+        <div className="wallet-info">
           <p className="wallet-label">Connected as</p>
           <p className="wallet-address">
-            {user.displayName || 'User'} ({formatAddress(user.walletAddress)})
+            {user.displayName || 'User'}
+          </p>
+          <p className="wallet-address-hex">
+            {formatAddress(user.walletAddress)}
           </p>
           {user.balance && <p className="wallet-balance">{user.balance}</p>}
+          <div className="disconnect-button-container">
+            <button 
+              onClick={logout}
+              className="disconnect-button"
+              title="Disconnect Wallet"
+            >
+              Disconnect
+            </button>
+          </div>
         </div>
-        <button 
-          onClick={logout}
-          className="disconnect-button"
-        >
-          Disconnect
-        </button>
       </div>
       {showRoleSwitcher && <RoleSwitcher />}
     </div>

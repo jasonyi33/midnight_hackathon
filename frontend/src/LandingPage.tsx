@@ -43,7 +43,7 @@ const LandingPage = () => {
     return (
       <div className="landing-page">
         <nav className="landing-nav">
-          <div className="nav-logo">GENOMIC PRIVACY</div>
+          <div className="nav-logo">HELIXCHAIN</div>
           <div className="nav-links">
           </div>
         </nav>
@@ -53,7 +53,8 @@ const LandingPage = () => {
           <div className="gradient-orb bottom-right"></div>
           
           <h1 className="hero-title">
-            Your gateway to <span className="highlight">genomic data protection</span>
+            <span className="title-line-1">Your gateway to</span>
+            <span className="title-line-2"><span className="highlight">genomic data protection</span></span>
           </h1>
           <p className="hero-subtitle">
             Secure zero-knowledge verification of genetic traits powered by Midnight blockchain
@@ -90,7 +91,7 @@ const LandingPage = () => {
           <section id="features" className="features-section">
             <div className="section-header">
               <span className="section-tag">Features</span>
-              <h2 className="section-title">Revolutionizing Genomic Privacy</h2>
+              <h2 className="section-title healthcare-title">Revolutionizing Healthcare Data</h2>
               <p className="section-intro">
                 Our platform uses advanced zero-knowledge proof technology to enable selective disclosure 
                 of genomic information without compromising your privacy. Your genetic data remains fully 
@@ -101,7 +102,7 @@ const LandingPage = () => {
             <div className="feature-cards">
               <div className="feature-card">
                 <div className="feature-icon">
-                  <svg viewBox="0 0 24 24" width="40" height="40" stroke="currentColor" fill="none">
+                  <svg viewBox="0 0 24 24" width="45" height="45" stroke="currentColor" fill="none" style={{filter: 'drop-shadow(0 0 8px rgba(0,195,140,0.3))'}}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                   </svg>
                 </div>
@@ -109,12 +110,12 @@ const LandingPage = () => {
                 <p className="feature-description">
                   Securely store your genomic data and selectively share only what's necessary with healthcare providers.
                 </p>
-                <a href="#" className="feature-link">Learn more <span>→</span></a>
+                <button onClick={() => handleConnect()} className="portal-button patient-button">Patient Portal <span>→</span></button>
               </div>
               
               <div className="feature-card">
                 <div className="feature-icon">
-                  <svg viewBox="0 0 24 24" width="40" height="40" stroke="currentColor" fill="none">
+                  <svg viewBox="0 0 24 24" width="45" height="45" stroke="currentColor" fill="none" style={{filter: 'drop-shadow(0 0 8px rgba(0,195,140,0.3))'}}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19.5 5.5h-15v2h15v-2zM19.5 10.5h-15v2h15v-2zM19.5 15.5h-15v2h15v-2zM4.5 4v16M19.5 4v16"></path>
                   </svg>
                 </div>
@@ -122,12 +123,12 @@ const LandingPage = () => {
                 <p className="feature-description">
                   Verify patient genetic traits without accessing their complete genome for personalized treatment.
                 </p>
-                <a href="#" className="feature-link">Learn more <span>→</span></a>
+                <button onClick={() => handleConnect()} className="portal-button doctor-button">Doctor Portal <span>→</span></button>
               </div>
               
               <div className="feature-card">
                 <div className="feature-icon">
-                  <svg viewBox="0 0 24 24" width="40" height="40" stroke="currentColor" fill="none">
+                  <svg viewBox="0 0 24 24" width="45" height="45" stroke="currentColor" fill="none" style={{filter: 'drop-shadow(0 0 8px rgba(0,195,140,0.3))'}}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15.5 12a3.5 3.5 0 11-7 0 3.5 3.5 0 017 0zM20 15.534A8.25 8.25 0 0012 21a8.25 8.25 0 00-8-5.466V7.466A8.25 8.25 0 0012 3a8.25 8.25 0 008 5.466v7.068z"></path>
                   </svg>
                 </div>
@@ -135,17 +136,66 @@ const LandingPage = () => {
                 <p className="feature-description">
                   Access anonymized genomic data for research while preserving individual privacy through ZK proofs.
                 </p>
-                <a href="#" className="feature-link">Learn more <span>→</span></a>
+                <button onClick={() => handleConnect()} className="portal-button researcher-button">Researcher Portal <span>→</span></button>
+              </div>
+            </div>
+          </section>
+
+          <section id="how-to" className="how-to-section">
+            <div className="section-header">
+              <span className="section-tag">Get Started</span>
+              <h2 className="section-title how-to-title">How It Works</h2>
+              <p className="section-intro">
+                Secure your genomic data and unlock its potential while maintaining complete privacy.
+                Our platform makes it easy to get started in just a few simple steps.
+              </p>
+            </div>
+            
+            <div className="steps-container">
+              <div className="step-item">
+                <div className="step-number">1</div>
+                <div className="step-content">
+                  <h3 className="step-title">Connect Your Wallet</h3>
+                  <p className="step-description">Link your Lace wallet to create a secure account and establish your identity on the platform.</p>
+                </div>
+              </div>
+              
+              <div className="step-item">
+                <div className="step-number">2</div>
+                <div className="step-content">
+                  <h3 className="step-title">Upload Genomic Data</h3>
+                  <p className="step-description">Securely upload your encrypted genomic data, which remains fully under your control at all times.</p>
+                </div>
+              </div>
+              
+              <div className="step-item">
+                <div className="step-number">3</div>
+                <div className="step-content">
+                  <h3 className="step-title">Generate ZK Proofs</h3>
+                  <p className="step-description">Create zero-knowledge proofs that verify specific genetic traits without revealing your complete genetic data.</p>
+                </div>
+              </div>
+              
+              <div className="step-item">
+                <div className="step-number">4</div>
+                <div className="step-content">
+                  <h3 className="step-title">Share Securely</h3>
+                  <p className="step-description">Selectively share proofs with healthcare providers and researchers while maintaining complete privacy.</p>
+                </div>
               </div>
             </div>
           </section>
           
-          <div className="section-divider"></div>
-          
           <section id="technology" className="tech-section">
             <div className="section-header">
               <span className="section-tag">Technology</span>
-              <h2 className="section-title">Powered by Cutting-Edge Tech</h2>
+              <h2 className="section-title tech-title">
+                <span className="tech-line-1">Powered by</span>
+                <span className="tech-line-2">Cutting-Edge Tech</span>
+              </h2>
+              <p className="section-intro">
+                Our platform leverages innovative technologies to provide unmatched security and privacy for your genetic data, combining blockchain, zero-knowledge proofs, and distributed storage.
+              </p>
             </div>
             
             <div className="tech-grid">
@@ -173,98 +223,22 @@ const LandingPage = () => {
             
             <div className="login-cta">
               <div className="cta-content">
-                <h3>Ready to get started?</h3>
-                <p>Connect your wallet to access your personalized genomic services dashboard</p>
-              </div>
-              <button
-                onClick={handleConnect}
-                disabled={status === 'connecting'}
-                className="connect-button"
-              >
-                {status === 'connecting' ? 'Connecting...' : 'Connect Wallet'}
-              </button>
-            </div>
-          </section>
-          
-          <div className="section-divider"></div>
-          
-          <section id="about" className="traits-section">
-            <div className="section-header">
-              <span className="section-tag">Platform</span>
-              <h2 className="section-title">Supported Genetic Traits</h2>
-            </div>
-            
-            <div className="traits-grid">
-              <div className="trait-item">
-                <div className="trait-icon"></div>
-                <h4>BRCA1/BRCA2 mutations</h4>
-                <p>Privacy-focused breast cancer risk assessment</p>
-              </div>
-              <div className="trait-item">
-                <div className="trait-icon"></div>
-                <h4>CYP2D6 drug metabolism</h4>
-                <p>Personalized medication efficacy verification</p>
-              </div>
-              <div className="trait-item">
-                <div className="trait-icon"></div>
-                <h4>Privacy-preserving verification</h4>
-                <p>Custom trait verification without data exposure</p>
-              </div>
-              <div className="trait-item">
-                <div className="trait-icon"></div>
-                <h4>Zero-knowledge proofs</h4>
-                <p>Maximum security cryptographic verification</p>
+                <h3 className="cta-title">Ready to get started?</h3>
+                <p className="cta-subtitle">Connect your wallet to access your personalized genomic services dashboard</p>
+                <button
+                  onClick={handleConnect}
+                  disabled={status === 'connecting'}
+                  className="cta-button"
+                >
+                  {status === 'connecting' ? 'Connecting...' : 'Connect Wallet'}
+                </button>
               </div>
             </div>
           </section>
         </div>
         
         <footer className="landing-footer">
-          <div className="footer-content">
-            <div className="footer-logo">GENOMIC PRIVACY</div>
-            <div className="footer-links">
-              <div className="footer-column">
-                <h4>Platform</h4>
-                <a href="#">Features</a>
-                <a href="#">Technology</a>
-                <a href="#">Security</a>
-                <a href="#">Pricing</a>
-              </div>
-              <div className="footer-column">
-                <h4>Resources</h4>
-                <a href="#">Documentation</a>
-                <a href="#">API</a>
-                <a href="#">Research Papers</a>
-                <a href="#">Case Studies</a>
-              </div>
-              <div className="footer-column">
-                <h4>Company</h4>
-                <a href="#">About Us</a>
-                <a href="#">Careers</a>
-                <a href="#">Contact</a>
-                <a href="#">Blog</a>
-              </div>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <p>© 2025 Genomic Privacy DApp | Powered by Midnight Network</p>
-            <div className="legal-links">
-              <a href="#">Privacy Policy</a>
-              <span>•</span>
-              <a href="#">Terms of Service</a>
-              <span>•</span>
-              <a href="#">Cookie Preferences</a>
-            </div>
-          </div>
-        </footer>
-
-        <footer className="landing-footer">
-          <p>© 2025 Genomic Privacy DApp | Powered by Midnight Network</p>
-          <div className="footer-links">
-            <span>Privacy Policy</span>
-            <span>Terms of Service</span>
-            <span>Contact</span>
-          </div>
+          <p>© 2025 HelixChain DApp | Powered by Midnight Network</p>
         </footer>
       </div>
     );
@@ -379,13 +353,13 @@ const LandingPage = () => {
         </div>
         
         <div className="demo-notice">
-          <p>Genomic Privacy DApp - Powered by HelixChain</p>
+          <p>HelixChain DApp - Powered by Midnight Network</p>
           <p>Your data remains fully encrypted and under your control</p>
         </div>
       </div>
       
       <footer className="landing-footer">
-        <p>© 2025 Genomic Privacy DApp | Powered by Midnight Network</p>
+        <p>© 2025 HelixChain DApp | Powered by Midnight Network</p>
       </footer>
     </div>
   );
